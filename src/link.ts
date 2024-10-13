@@ -1,8 +1,10 @@
 import {html} from 'lit';
-import {customElement} from 'lit/decorators.js';
+import {customElement, state} from 'lit/decorators.js';
 import {styles} from './link.styles';
-import {urlToOrigin} from './lib/util/url-helper';
-import {BaseDirective} from './directives/base-directive';
+import {LinkPreviewDataDirective} from './directives/link-preview-data-directive';
+import {TEST_IDS} from './lib/util/test-helper';
+import './components/skeleton-shape';
+import {fallbackFavicon, fallbackImage} from './templates';
 
 /**
  * An example element.
@@ -12,50 +14,129 @@ import {BaseDirective} from './directives/base-directive';
  * @part link-card - The figure element that contains the link card
  */
 @customElement('previewbox-link')
-export class PreviewBoxLinkElement extends BaseDirective {
+export class PreviewBoxLinkElement extends LinkPreviewDataDirective {
   static override styles = styles;
 
+  @state()
+  isImgError = false;
+
+  @state()
+  isFaviconError = false;
+
   override render() {
-    if (!this.href) {
-      return html`<div>No 'href' provided</div>`;
-    }
-    if (!this._linkPreviewProps?.url) {
-      return html`<div data-testid="loading">Loading...</div>`;
-    }
-    const origin = urlToOrigin(this._linkPreviewProps.url);
     return html`
       <figure part="link-card" class="previewbox-link-card">
         <a
-          href=${this._linkPreviewProps.url}
+          href=${this.linkData.url || this.href}
           target=${this.target}
           part="link"
           rel=${this.rel}
           class="link"
+          data-testid="${TEST_IDS.ANCHOR_ELEMENT}"
         >
-          <div class="kg-bookmark-content">
-            <div class="kg-bookmark-title">${this._linkPreviewProps.title}</div>
-            <div class="kg-bookmark-description">
-              ${this._linkPreviewProps.description}
+          <div class="previewbox-content">
+            <div class="previewbox-title" data-testid="${TEST_IDS.TITLE}">
+              ${this._isLoading
+                ? html`<previewbox-skeleton-shape
+                    width="200px"
+                    height="20px"
+                    data-testid="${TEST_IDS.TITLE_SKELETON}"
+                  />`
+                : this.linkData.title}
             </div>
-            <div class="kg-bookmark-metadata">
-              <img
-                class="kg-bookmark-icon"
-                src=${this._linkPreviewProps.favicon ?? ''}
-                alt="Favicon of ${origin}"
-              /><span class="kg-bookmark-author">${origin}</span>${this
-                ._linkPreviewProps.author
-                ? html`<span class="kg-bookmark-publisher"
-                    >${this._linkPreviewProps.author}</span
-                  >`
-                : ''}
+            <div
+              class="previewbox-description"
+              data-testid="${TEST_IDS.DESCRIPTION}"
+            >
+              ${this._isLoading
+                ? html`
+                    <previewbox-skeleton-shape
+                      width="100%"
+                      height="16px"
+                    ></previewbox-skeleton-shape>
+                    <previewbox-skeleton-shape
+                      width="70%"
+                      height="16px"
+                      style="margin-top: 4px;"
+                    ></previewbox-skeleton-shape>
+                  `
+                : this.linkData.description}
+            </div>
+            <div class="previewbox-metadata">
+              ${this._isLoading
+                ? html`
+                    <div class="previewbox-metadata-skeleton">
+                      <previewbox-skeleton-shape
+                        width="14px"
+                        data-testid="${TEST_IDS.FAVICON_SKELETON}"
+                        height="14px"
+                        class="rounded"
+                      ></previewbox-skeleton-shape>
+                      <previewbox-skeleton-shape
+                        width="60px"
+                        height="14px"
+                      ></previewbox-skeleton-shape>
+                      <previewbox-skeleton-shape
+                        width="4px"
+                        height="4px"
+                        class="rounded"
+                      ></previewbox-skeleton-shape>
+                      <previewbox-skeleton-shape
+                        width="44px"
+                        height="14px"
+                      ></previewbox-skeleton-shape>
+                    </div>
+                  `
+                : html`
+                    ${this.linkData?.favicon && !this.isFaviconError
+                      ? html`
+                          <img
+                            data-testid="${TEST_IDS.FAVICON}"
+                            class="previewbox-favicon"
+                            src=${this.linkData.favicon ?? ''}
+                            alt="Favicon of ${this.linkData.origin}"
+                            @error=${() => (this.isFaviconError = true)}
+                          />
+                        `
+                      : fallbackFavicon}
+                    <span data-testid="${TEST_IDS.ORIGIN}"
+                      >${this.linkData.origin}</span
+                    >${this.linkData.author
+                      ? html`<span data-testid="${TEST_IDS.AUTHOR}"
+                          >${this.linkData.author}</span
+                        >`
+                      : ''}
+                  `}
             </div>
           </div>
-          <div class="kg-bookmark-thumbnail">
-            <img
-              src=${this._linkPreviewProps?.image?.url ?? ''}
-              alt=${this._linkPreviewProps.image?.alt ??
-              'Thumbnail image of ' + this.url}
-            />
+          <div class="previewbox-thumbnail">
+            ${this._isLoading
+              ? html`<previewbox-skeleton-shape
+                  height="100%"
+                  data-testid="${TEST_IDS.THUMBNAIL_SKELETON}"
+                >
+                  ${fallbackImage}
+                </previewbox-skeleton-shape>`
+              : html`
+                  ${this.linkData?.imageUrl && !this.isImgError
+                    ? html`
+                        <img
+                          data-testid="${TEST_IDS.THUMBNAIL}"
+                          src=${this.linkData?.imageUrl ?? ''}
+                          alt=${this.linkData?.imageAlt ??
+                          'Thumbnail image of ' + this.url}
+                          @error=${() => (this.isImgError = true)}
+                        />
+                      `
+                    : html`
+                        <figure
+                          class="fallback-img"
+                          data-testid="${TEST_IDS.THUMBNAIL_FALLBACK}"
+                        >
+                          ${fallbackImage}
+                        </figure>
+                      `}
+                `}
           </div>
         </a>
       </figure>

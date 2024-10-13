@@ -14,6 +14,9 @@ The `<previewbox-link>` component is a simple link card, similar to those found 
 
 [![PreviewBox Link](https://raw.githubusercontent.com/MariusBongarts/previewbox/main/assets/img/link-preview.webp)](https://web-highlights.com/about)
 
+## Demo
+
+Check out this [Codepen](https://codepen.io/marius2502/pen/eYqJMwp) for a live demo.
 
 ## Installation
 
@@ -41,15 +44,90 @@ import '@mariusbongarts/previewbox/dist/link';
 
 ## Usage
 
-To use the `<previewbox-link>` component, include it in your HTML and set the `href` attribute to the desired link:
+To use the `<previewbox-link>` component, you can either set the `href` attribute to fetch link preview data automatically or manually set the attributes for a custom preview.
+
+### Using `href` Attribute
+
+Include the component in your HTML and set the `href` attribute to the desired link:
 
 ```html
 <previewbox-link href="https://web-highlights.com/about"></previewbox-link>
 ```
 
-## Demo
+> [!IMPORTANT]
+> To retrieve Open Graph data for link previews, you'll need a server to process the requests. Right now, there are no limits on how many API calls you can make. However, as more users join, we may set limits.
 
-Check out this [Codepen](https://codepen.io/marius2502/pen/eYqJMwp) for a live demo.
+### Manually Setting Attributes
+
+You can also manually set the attributes to customize the link preview:
+
+```html
+<previewbox-link
+  url="https://web-highlights.com/about"
+  date="2024-01-01"
+  title="About Me | Creating Web Highlights | My Story & Mission"
+  description="Hi, I'm Marius, the creator of Web Highlights. Learn how I build this tool since 2019, my mission to organize digital info, and why I stand behind every feature."
+  author="Marius Bongarts"
+  imageUrl="https://web-highlights.com/images/about-me.png"
+  imageAlt="Me at the beach in Portugal"
+  faviconUrl="https://web-highlights.com/favicon.ico"
+  target="_self"
+  rel="nofollow"
+></previewbox-link>
+```
+
+This allows you to have full control over the content displayed in the link preview.
+
+You can find all properties in the [API documentation](https://mariusbongarts.github.io/previewbox/api/).
+
+### CSS Customization
+
+The `<previewbox-link>` component supports CSS customization through custom properties. You can define these properties in your stylesheet or directly in the HTML using the `style` attribute. Here's an example:
+
+```html
+<previewbox-link
+  style="--background-color: #f0f0f0; --text-color: #333;"
+  href="https://web-highlights.com/about"
+></previewbox-link>
+```
+
+In your CSS file, you can define these properties globally or for specific elements:
+
+```css
+:root {
+  --background-color: #f0f0f0;
+  --text-color: #333;
+}
+
+previewbox-link {
+  --border-color: #ddd;
+  --metadata-color: rgba(0, 0, 0, 0.5);
+}
+```
+
+### CSS Custom Properties
+
+The `<previewbox-link>` component supports the following CSS custom properties for styling:
+
+| Property Name                    | Description                            | Default Value              |
+| -------------------------------- | -------------------------------------- | -------------------------- |
+| `--background-color`             | Background color of the link card      | `#ffffff`                  |
+| `--dark-background-color`        | Background color in dark mode          | `#121212`                  |
+| `--text-color`                   | Text color of the link card            | `#000000`                  |
+| `--dark-text-color`              | Text color in dark mode                | `#e0e0e0`                  |
+| `--border-color`                 | Border color of the link card          | `rgb(124 139 154 / 25%)`   |
+| `--dark-border-color`            | Border color in dark mode              | `#8080803a`                |
+| `--metadata-color`               | Color of the metadata text             | `rgba(0, 0, 0, 0.7)`       |
+| `--dark-metadata-color`          | Metadata text color in dark mode       | `rgba(255, 255, 255, 0.7)` |
+| `--skeleton-color`               | Color of the loading skeleton          | `rgb(229, 231, 235)`       |
+| `--dark-skeleton-color`          | Skeleton color in dark mode            | `rgb(55, 65, 81)`          |
+| `--fallback-img-color`           | Color of the fallback image            | `hsl(220, 13%, 80%)`       |
+| `--dark-fallback-img-color`      | Fallback image color in dark mode      | `hsl(220, 13%, 40%)`       |
+| `--fallback-img-background`      | Background of the fallback image       | `rgb(229, 231, 235)`       |
+| `--dark-fallback-img-background` | Fallback image background in dark mode | `rgb(55, 65, 81)`          |
+| `--favicon-size`                 | Size of the favicon image              | `20px`                     |
+
+These properties allow you to customize the appearance of the link preview to match your website's design.
 
 ## License
 

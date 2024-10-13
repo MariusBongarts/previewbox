@@ -612,6 +612,13 @@
     --dark-text-color: #e0e0e0;
     --dark-border-color: #8080803a;
     --dark-metadata-color: rgba(255, 255, 255, 0.7);
+    --skeleton-color: rgb(229, 231, 235);
+    --dark-skeleton-color: rgb(55, 65, 81);
+    --fallback-img-color: hsl(220, 13%, 80%);
+    --fallback-img-background: rgb(229, 231, 235);
+    --dark-fallback-img-color: hsl(220, 13%, 40%);
+    --dark-fallback-img-background: rgb(55, 65, 81);
+    --favicon-size: 20px;
   }
 
   .previewbox-link-card {
@@ -631,7 +638,7 @@
     color: inherit;
   }
 
-  .kg-bookmark-content {
+  .previewbox-content {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -642,20 +649,28 @@
     overflow: hidden;
   }
 
-  .kg-bookmark-title {
+  .previewbox-title {
+    display: -webkit-box;
     font-size: 1rem;
-    line-height: 1.4em;
     font-weight: 500;
+    line-height: 1.2;
+    height: 40px;
+    overflow: hidden;
+    @media (min-width: 768px) {
+      line-height: 1.4;
+      height: 24px;
+    }
     color: var(--text-color);
   }
 
-  .kg-bookmark-description {
+  .previewbox-description {
     display: -webkit-box;
     font-size: 0.875rem;
     line-height: 1.5em;
     margin-top: 3px;
     font-weight: 400;
-    max-height: 44px;
+    width: 100%;
+    height: 44px;
     overflow-y: hidden;
     opacity: 0.7;
     -webkit-line-clamp: 2;
@@ -663,49 +678,87 @@
     color: var(--metadata-color);
   }
 
-  .kg-bookmark-metadata {
+  .previewbox-metadata {
     display: flex;
     align-items: center;
     margin-top: 22px;
     width: 100%;
+    height: 20px;
     font-size: 0.75rem;
     font-weight: 500;
     white-space: nowrap;
     color: var(--metadata-color);
+    .previewbox-metadata-skeleton {
+      display: flex;
+      column-gap: 4px;
+      align-items: center;
+
+      .rounded::part(skeleton-shape) {
+        border-radius: 50%;
+      }
+    }
+    svg {
+      width: var(--favicon-size);
+      height: var(--favicon-size);
+      margin-right: 6px;
+    }
   }
 
-  .kg-bookmark-metadata > span:nth-of-type(2)::before {
+  .previewbox-metadata > span:nth-of-type(2)::before {
     content: '•';
     margin: 0px 6px;
   }
 
-  .kg-bookmark-metadata > span:last-of-type {
+  .previewbox-metadata > span:last-of-type {
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .kg-bookmark-metadata > :not(img) {
+  .previewbox-metadata > :not(img) {
     opacity: 0.7;
   }
 
-  .kg-bookmark-icon {
-    width: 20px;
-    height: 20px;
+  .previewbox-favicon {
+    width: var(--favicon-size);
+    height: var(--favicon-size);
     margin-right: 6px;
   }
 
-  .kg-bookmark-thumbnail {
+  .previewbox-thumbnail {
     position: relative;
     flex-grow: 1;
     min-width: 33%;
-    img {
+    img,
+    previewbox-skeleton-shape,
+    .fallback-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       top: 0;
       left: 0;
       border-radius: 0 2px 2px 0;
+      margin: 0;
+      background-color: var(--fallback-img-background);
+
+      @media (prefers-color-scheme: dark) {
+        background-color: var(--dark-fallback-img-background);
+      }
+
+      svg {
+        width: 40px;
+        height: 40px;
+        color: var(--fallback-img-color);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        svg {
+          color: var(--dark-fallback-img-color);
+        }
+      }
     }
   }
 
@@ -725,15 +778,15 @@
       border: 1px solid var(--dark-border-color);
     }
 
-    .kg-bookmark-title {
+    .previewbox-title {
       color: var(--dark-text-color);
     }
 
-    .kg-bookmark-description {
+    .previewbox-description {
       color: var(--dark-metadata-color);
     }
 
-    .kg-bookmark-metadata {
+    .previewbox-metadata {
       color: var(--dark-metadata-color);
     }
   }
@@ -744,91 +797,380 @@
     return url?.replace(/https:\/\/|http:\/\/|www.|/gi, "") ?? "";
   }
   function urlToOrigin(url) {
-    url = urlWithoutSchema(url);
-    url = url?.split("/")[0];
-    return url ?? "";
+    try {
+      url = urlWithoutSchema(url);
+      url = url?.split("/")[0];
+      return url ?? "";
+    } catch (error) {
+      return url ?? "";
+    }
   }
+
+  // src/lib/adapters/meta-api/mapper.ts
+  var mapLinkMetaDataToLinkPreviewData = (data) => {
+    return {
+      title: data.title ?? null,
+      imageUrl: data.image?.url ?? null,
+      imageAlt: data.image?.alt ?? null,
+      description: data.description ?? null,
+      url: data.url ?? null,
+      author: data.author ?? null,
+      favicon: data.favicon ?? null,
+      date: data.date ?? null,
+      origin: urlToOrigin(data.url) ?? null
+    };
+  };
 
   // src/lib/adapters/meta-api/index.ts
   var fetchLinkPreviewData = async (url) => {
-    const response = await fetch(`https://web-highlights.herokuapp.com/meta/${encodeURIComponent(url)}`);
-    return response.json();
+    const response = await fetch(
+      `https://web-highlights.herokuapp.com/meta/${encodeURIComponent(url)}`
+    );
+    const linkMetaData = await response.json();
+    return mapLinkMetaDataToLinkPreviewData(linkMetaData);
   };
 
-  // src/directives/base-directive.ts
-  var BaseDirective = class extends h3 {
+  // src/directives/anchor-element-data.directive.ts
+  var AnchorElementDataDirective = class extends h3 {
     constructor() {
       super(...arguments);
       this.href = "";
-      this.url = "";
       this.target = "_blank";
       this.rel = "";
-      this._linkPreviewProps = null;
-    }
-    firstUpdated(_changedProperties) {
-      console.log("firstUpdated", !!this.href);
-      if (this.href) {
-        fetchLinkPreviewData(this.href).then((data) => {
-          this._linkPreviewProps = data;
-        });
-      }
     }
   };
   __decorateClass([
     n4()
-  ], BaseDirective.prototype, "href", 2);
+  ], AnchorElementDataDirective.prototype, "href", 2);
   __decorateClass([
     n4()
-  ], BaseDirective.prototype, "url", 2);
+  ], AnchorElementDataDirective.prototype, "target", 2);
   __decorateClass([
     n4()
-  ], BaseDirective.prototype, "target", 2);
+  ], AnchorElementDataDirective.prototype, "rel", 2);
+
+  // src/directives/link-preview-data-directive.ts
+  var LinkPreviewDataDirective = class extends AnchorElementDataDirective {
+    constructor() {
+      super(...arguments);
+      this.url = null;
+      this.title = "";
+      this.description = null;
+      this.author = null;
+      this.imageUrl = null;
+      this.imageAlt = null;
+      this.faviconUrl = null;
+      this.date = null;
+      this.fetchedLinkPreviewData = null;
+      this._isLoading = false;
+      this._isError = false;
+    }
+    get linkData() {
+      if (this.fetchedLinkPreviewData) {
+        return this.fetchedLinkPreviewData;
+      }
+      return {
+        url: this.url,
+        description: this.description,
+        title: this.title,
+        author: this.author,
+        imageUrl: this.imageUrl,
+        imageAlt: this.imageAlt,
+        favicon: this.faviconUrl,
+        date: this.date,
+        origin: urlToOrigin(this.url)
+      };
+    }
+    firstUpdated(_changedProperties) {
+      if (!this.href && !this.url) {
+        throw new Error(`No href or url provided for ${this.localName}`);
+      }
+      if (this.href) {
+        this._fetchLinkPreviewData();
+      } else {
+        this._setManualData();
+      }
+    }
+    _fetchLinkPreviewData() {
+      this._isLoading = true;
+      fetchLinkPreviewData(this.href).then((data) => {
+        this.fetchedLinkPreviewData = data;
+      }).catch((error) => {
+        console.error(
+          `Error fetching link preview data for ${this.href}: ${error}`
+        );
+        this._isError = true;
+      }).finally(() => {
+        this._isLoading = false;
+      });
+    }
+    _setManualData() {
+      if (!this.url) {
+        throw new Error(
+          `As no href was provided, url is required for ${this.localName}`
+        );
+      }
+      this.fetchedLinkPreviewData = {
+        url: this.url,
+        description: this.description,
+        title: this.title,
+        author: this.author,
+        imageUrl: this.imageUrl,
+        imageAlt: this.imageAlt,
+        favicon: this.faviconUrl,
+        date: this.date,
+        origin: urlToOrigin(this.url)
+      };
+    }
+  };
   __decorateClass([
     n4()
-  ], BaseDirective.prototype, "rel", 2);
+  ], LinkPreviewDataDirective.prototype, "url", 2);
+  __decorateClass([
+    n4()
+  ], LinkPreviewDataDirective.prototype, "title", 2);
+  __decorateClass([
+    n4()
+  ], LinkPreviewDataDirective.prototype, "description", 2);
+  __decorateClass([
+    n4()
+  ], LinkPreviewDataDirective.prototype, "author", 2);
+  __decorateClass([
+    n4()
+  ], LinkPreviewDataDirective.prototype, "imageUrl", 2);
+  __decorateClass([
+    n4()
+  ], LinkPreviewDataDirective.prototype, "imageAlt", 2);
+  __decorateClass([
+    n4()
+  ], LinkPreviewDataDirective.prototype, "faviconUrl", 2);
+  __decorateClass([
+    n4()
+  ], LinkPreviewDataDirective.prototype, "date", 2);
   __decorateClass([
     r4()
-  ], BaseDirective.prototype, "_linkPreviewProps", 2);
+  ], LinkPreviewDataDirective.prototype, "fetchedLinkPreviewData", 2);
+  __decorateClass([
+    r4()
+  ], LinkPreviewDataDirective.prototype, "_isLoading", 2);
+  __decorateClass([
+    r4()
+  ], LinkPreviewDataDirective.prototype, "_isError", 2);
+
+  // src/lib/util/test-helper.ts
+  var TEST_IDS = {
+    LOADING: "LOADING",
+    FAVICON: "FAVICON",
+    FAVICON_SKELETON: "FAVICON_SKELETON",
+    FAVICON_FALLBACK: "FAVICON_FALLBACK",
+    THUMBNAIL: "THUMBNAIL",
+    THUMBNAIL_SKELETON: "THUMBNAIL_SKELETON",
+    THUMBNAIL_FALLBACK: "THUMBNAIL_FALLBACK",
+    AUTHOR: "AUTHOR",
+    ORIGIN: "PUBLISHER",
+    ANCHOR_ELEMENT: "ANCHOR_ELEMENT",
+    TITLE: "TITLE",
+    TITLE_SKELETON: "TITLE_SKELETON",
+    DESCRIPTION: "DESCRIPTION"
+  };
+
+  // src/components/skeleton-shape.styles.ts
+  var styles2 = i`
+  :host {
+    display: block;
+    box-sizing: border-box;
+    font-family: inherit;
+  }
+
+  .skeleton-shape {
+    background-color: var(--skeleton-color);
+    animation: pulse 1.5s infinite ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :host {
+      --skeleton-color: var(--dark-skeleton-color);
+    }
+  }
+`;
+
+  // src/components/skeleton-shape.ts
+  var PreviewBoxSkeletonShapeElement = class extends h3 {
+    constructor() {
+      super(...arguments);
+      this.width = "100%";
+      this.height = "16px";
+    }
+    render() {
+      return ke`<div
+      class="skeleton-shape"
+      part="skeleton-shape"
+      role="progressbar"
+      style="width: ${this.width}; height: ${this.height};"
+    >
+      <slot></slot>
+    </div>`;
+    }
+  };
+  PreviewBoxSkeletonShapeElement.styles = styles2;
+  __decorateClass([
+    n4()
+  ], PreviewBoxSkeletonShapeElement.prototype, "width", 2);
+  __decorateClass([
+    n4()
+  ], PreviewBoxSkeletonShapeElement.prototype, "height", 2);
+  PreviewBoxSkeletonShapeElement = __decorateClass([
+    t2("previewbox-skeleton-shape")
+  ], PreviewBoxSkeletonShapeElement);
+
+  // src/templates/index.ts
+  var fallbackImage = ke`<svg
+  aria-hidden="true"
+  xmlns="http://www.w3.org/2000/svg"
+  fill="currentColor"
+  viewBox="0 0 20 18"
+>
+  <path
+    d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"
+  />
+</svg>`;
+  var fallbackFavicon = ke`<svg
+  aria-hidden="true"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  data-testid="${TEST_IDS.FAVICON_FALLBACK}"
+  stroke-width="1.5"
+  fill="none"
+  viewBox="0 0 24 24"
+>
+  <path
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-width="2"
+    d="M4.37 7.657c2.063.528 2.396 2.806 3.202 3.87 1.07 1.413 2.075 1.228 3.192 2.644 1.805 2.289 1.312 5.705 1.312 6.705M20 15h-1a4 4 0 0 0-4 4v1M8.587 3.992c0 .822.112 1.886 1.515 2.58 1.402.693 2.918.351 2.918 2.334 0 .276 0 2.008 1.972 2.008 2.026.031 2.026-1.678 2.026-2.008 0-.65.527-.9 1.177-.9H20M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+  />
+</svg> `;
 
   // src/link.ts
-  var PreviewBoxLinkElement = class extends BaseDirective {
+  var PreviewBoxLinkElement = class extends LinkPreviewDataDirective {
+    constructor() {
+      super(...arguments);
+      this.isImgError = false;
+      this.isFaviconError = false;
+    }
     render() {
-      if (!this.href) {
-        return ke`<div>No 'href' provided</div>`;
-      }
-      if (!this._linkPreviewProps?.url) {
-        return ke`<div data-testid="loading">Loading...</div>`;
-      }
-      const origin = urlToOrigin(this._linkPreviewProps.url);
       return ke`
       <figure part="link-card" class="previewbox-link-card">
         <a
-          href=${this._linkPreviewProps.url}
+          href=${this.linkData.url || this.href}
           target=${this.target}
           part="link"
           rel=${this.rel}
           class="link"
+          data-testid="${TEST_IDS.ANCHOR_ELEMENT}"
         >
-          <div class="kg-bookmark-content">
-            <div class="kg-bookmark-title">${this._linkPreviewProps.title}</div>
-            <div class="kg-bookmark-description">
-              ${this._linkPreviewProps.description}
+          <div class="previewbox-content">
+            <div class="previewbox-title" data-testid="${TEST_IDS.TITLE}">
+              ${this._isLoading ? ke`<previewbox-skeleton-shape
+                    width="200px"
+                    height="20px"
+                    data-testid="${TEST_IDS.TITLE_SKELETON}"
+                  />` : this.linkData.title}
             </div>
-            <div class="kg-bookmark-metadata">
-              <img
-                class="kg-bookmark-icon"
-                src=${this._linkPreviewProps.favicon ?? ""}
-                alt="Favicon of ${origin}"
-              /><span class="kg-bookmark-author">${origin}</span>${this._linkPreviewProps.author ? ke`<span class="kg-bookmark-publisher"
-                    >${this._linkPreviewProps.author}</span
-                  >` : ""}
+            <div
+              class="previewbox-description"
+              data-testid="${TEST_IDS.DESCRIPTION}"
+            >
+              ${this._isLoading ? ke`
+                    <previewbox-skeleton-shape
+                      width="100%"
+                      height="16px"
+                    ></previewbox-skeleton-shape>
+                    <previewbox-skeleton-shape
+                      width="70%"
+                      height="16px"
+                      style="margin-top: 4px;"
+                    ></previewbox-skeleton-shape>
+                  ` : this.linkData.description}
+            </div>
+            <div class="previewbox-metadata">
+              ${this._isLoading ? ke`
+                    <div class="previewbox-metadata-skeleton">
+                      <previewbox-skeleton-shape
+                        width="14px"
+                        data-testid="${TEST_IDS.FAVICON_SKELETON}"
+                        height="14px"
+                        class="rounded"
+                      ></previewbox-skeleton-shape>
+                      <previewbox-skeleton-shape
+                        width="60px"
+                        height="14px"
+                      ></previewbox-skeleton-shape>
+                      <previewbox-skeleton-shape
+                        width="4px"
+                        height="4px"
+                        class="rounded"
+                      ></previewbox-skeleton-shape>
+                      <previewbox-skeleton-shape
+                        width="44px"
+                        height="14px"
+                      ></previewbox-skeleton-shape>
+                    </div>
+                  ` : ke`
+                    ${this.linkData?.favicon && !this.isFaviconError ? ke`
+                          <img
+                            data-testid="${TEST_IDS.FAVICON}"
+                            class="previewbox-favicon"
+                            src=${this.linkData.favicon ?? ""}
+                            alt="Favicon of ${this.linkData.origin}"
+                            @error=${() => this.isFaviconError = true}
+                          />
+                        ` : fallbackFavicon}
+                    <span data-testid="${TEST_IDS.ORIGIN}"
+                      >${this.linkData.origin}</span
+                    >${this.linkData.author ? ke`<span data-testid="${TEST_IDS.AUTHOR}"
+                          >${this.linkData.author}</span
+                        >` : ""}
+                  `}
             </div>
           </div>
-          <div class="kg-bookmark-thumbnail">
-            <img
-              src=${this._linkPreviewProps?.image?.url ?? ""}
-              alt=${this._linkPreviewProps.image?.alt ?? "Thumbnail image of " + this.url}
-            />
+          <div class="previewbox-thumbnail">
+            ${this._isLoading ? ke`<previewbox-skeleton-shape
+                  height="100%"
+                  data-testid="${TEST_IDS.THUMBNAIL_SKELETON}"
+                >
+                  ${fallbackImage}
+                </previewbox-skeleton-shape>` : ke`
+                  ${this.linkData?.imageUrl && !this.isImgError ? ke`
+                        <img
+                          data-testid="${TEST_IDS.THUMBNAIL}"
+                          src=${this.linkData?.imageUrl ?? ""}
+                          alt=${this.linkData?.imageAlt ?? "Thumbnail image of " + this.url}
+                          @error=${() => this.isImgError = true}
+                        />
+                      ` : ke`
+                        <figure
+                          class="fallback-img"
+                          data-testid="${TEST_IDS.THUMBNAIL_FALLBACK}"
+                        >
+                          ${fallbackImage}
+                        </figure>
+                      `}
+                `}
           </div>
         </a>
       </figure>
@@ -836,6 +1178,12 @@
     }
   };
   PreviewBoxLinkElement.styles = styles;
+  __decorateClass([
+    r4()
+  ], PreviewBoxLinkElement.prototype, "isImgError", 2);
+  __decorateClass([
+    r4()
+  ], PreviewBoxLinkElement.prototype, "isFaviconError", 2);
   PreviewBoxLinkElement = __decorateClass([
     t2("previewbox-link")
   ], PreviewBoxLinkElement);

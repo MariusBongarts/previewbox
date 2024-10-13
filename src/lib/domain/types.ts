@@ -1,19 +1,11 @@
-interface OpenGraphImage {
-    // Height and Width can be optional, see doc on
-    // https://github.com/jshemas/openGraphScraper/blob/master/lib/media.js
-    height?: string;
-    type: string;
-    url: string;
-    width?: string;
-}
-
 export interface LinkPreviewData {
-  title?: string;
-  image?: OpenGraphImage & {alt?: string};
-  description?: string;
-  url?: string;
-  type?: string;
-  author?: string;
-  favicon?: string;
-  date?: string;
+  title: string | null;
+  imageUrl: string | null;
+  imageAlt: string | null;
+  description: string | null;
+  url: string | null;
+  author: string | null;
+  favicon: string | null;
+  date: string | null;
+  origin: string | null;
 }

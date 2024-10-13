@@ -100,7 +100,7 @@ export default {
     },
   },
   plugins: [
-    esbuildPlugin({ ts: true, tsconfig: './tsconfig.json' }),
+    esbuildPlugin({ts: true, tsconfig: './tsconfig.json'}),
     // Detect browsers without modules (e.g. IE11) and transform to SystemJS
     // (https://modern-web.dev/docs/dev-server/plugins/legacy/).
     legacyPlugin({
