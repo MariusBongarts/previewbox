@@ -1,4 +1,4 @@
-name: Install, Build, Test, Publish
+name: Install, Build, Test
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  build-test:
+  install-build-test:
     runs-on: ubuntu-latest
 
     steps:
