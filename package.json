@@ -1,6 +1,6 @@
 {
   "name": "@mariusbongarts/previewbox",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A comprehensive web component suite for rendering link previews, complete with thumbnails, titles, authors, and Open Graph metadata integration.",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -8,9 +8,6 @@
   "type": "module",
   "author": "Marius Bongarts",
   "license": "MIT",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/MariusBongarts/previewbox"
