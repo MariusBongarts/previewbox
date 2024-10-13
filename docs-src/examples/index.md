@@ -12,7 +12,7 @@ description: A basic example
     padding: 8px;
   }
 </style>
-<previewbox-link url="https://web-highlights.com"></previewbox-link>
+<previewbox-link href="https://web-highlights.com"></previewbox-link>
 
 <h3>CSS</h3>
 

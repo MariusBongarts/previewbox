@@ -597,12 +597,6 @@
     return n4({ ...r5, state: true, attribute: false });
   }
 
-  // src/lib/adapters/meta-api/index.ts
-  var fetchLinkPreviewData = async (url) => {
-    const response = await fetch(`https://web-highlights.herokuapp.com/meta/${encodeURIComponent(url)}`);
-    return response.json();
-  };
-
   // src/link.styles.ts
   var styles = i`
   :host {
@@ -755,29 +749,66 @@
     return url ?? "";
   }
 
-  // src/link.ts
-  var PreviewBoxLinkElement = class extends h3 {
+  // src/lib/adapters/meta-api/index.ts
+  var fetchLinkPreviewData = async (url) => {
+    const response = await fetch(`https://web-highlights.herokuapp.com/meta/${encodeURIComponent(url)}`);
+    return response.json();
+  };
+
+  // src/directives/base-directive.ts
+  var BaseDirective = class extends h3 {
     constructor() {
       super(...arguments);
+      this.href = "";
       this.url = "";
+      this.target = "_blank";
+      this.rel = "";
       this._linkPreviewProps = null;
     }
     firstUpdated(_changedProperties) {
-      fetchLinkPreviewData(this.url).then((data) => {
-        this._linkPreviewProps = data;
-      });
-    }
-    render() {
-      if (!this.url) {
-        return ke`<div>No URL provided</div>`;
+      console.log("firstUpdated", !!this.href);
+      if (this.href) {
+        fetchLinkPreviewData(this.href).then((data) => {
+          this._linkPreviewProps = data;
+        });
       }
-      if (!this._linkPreviewProps) {
+    }
+  };
+  __decorateClass([
+    n4()
+  ], BaseDirective.prototype, "href", 2);
+  __decorateClass([
+    n4()
+  ], BaseDirective.prototype, "url", 2);
+  __decorateClass([
+    n4()
+  ], BaseDirective.prototype, "target", 2);
+  __decorateClass([
+    n4()
+  ], BaseDirective.prototype, "rel", 2);
+  __decorateClass([
+    r4()
+  ], BaseDirective.prototype, "_linkPreviewProps", 2);
+
+  // src/link.ts
+  var PreviewBoxLinkElement = class extends BaseDirective {
+    render() {
+      if (!this.href) {
+        return ke`<div>No 'href' provided</div>`;
+      }
+      if (!this._linkPreviewProps?.url) {
         return ke`<div data-testid="loading">Loading...</div>`;
       }
-      const origin = urlToOrigin(this.url);
+      const origin = urlToOrigin(this._linkPreviewProps.url);
       return ke`
       <figure part="link-card" class="previewbox-link-card">
-        <a href=${this.url} part="link" class="link">
+        <a
+          href=${this._linkPreviewProps.url}
+          target=${this.target}
+          part="link"
+          rel=${this.rel}
+          class="link"
+        >
           <div class="kg-bookmark-content">
             <div class="kg-bookmark-title">${this._linkPreviewProps.title}</div>
             <div class="kg-bookmark-description">
@@ -788,11 +819,9 @@
                 class="kg-bookmark-icon"
                 src=${this._linkPreviewProps.favicon ?? ""}
                 alt="Favicon of ${origin}"
-              /><span class="kg-bookmark-author"
-                >${origin}</span
-              >${this._linkPreviewProps.author ? ke`<span class="kg-bookmark-publisher"
-                >${this._linkPreviewProps.author}</span
-              >` : ""}
+              /><span class="kg-bookmark-author">${origin}</span>${this._linkPreviewProps.author ? ke`<span class="kg-bookmark-publisher"
+                    >${this._linkPreviewProps.author}</span
+                  >` : ""}
             </div>
           </div>
           <div class="kg-bookmark-thumbnail">
@@ -807,12 +836,6 @@
     }
   };
   PreviewBoxLinkElement.styles = styles;
-  __decorateClass([
-    n4()
-  ], PreviewBoxLinkElement.prototype, "url", 2);
-  __decorateClass([
-    r4()
-  ], PreviewBoxLinkElement.prototype, "_linkPreviewProps", 2);
   PreviewBoxLinkElement = __decorateClass([
     t2("previewbox-link")
   ], PreviewBoxLinkElement);

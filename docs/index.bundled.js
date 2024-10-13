@@ -137,7 +137,7 @@
       color: var(--dark-metadata-color);
     }
   }
-`;var ut,ft=class extends nt{constructor(){super(...arguments),this.url="",this._linkPreviewProps=null}firstUpdated(t){(async t=>(await fetch(`https://web-highlights.herokuapp.com/meta/${encodeURIComponent(t)}`)).json())(this.url).then((t=>{this._linkPreviewProps=t}))}render(){if(!this.url)return J`<div>No URL provided</div>`;if(!this._linkPreviewProps)return J`<div data-testid="loading">Loading...</div>`;const t=(i=function(t){return t?.replace(/https:\/\/|http:\/\/|www.|/gi,"")??""}(i=this.url),i=i?.split("/")[0],i??"");var i;return J`
+`;var ut,ft=class extends nt{constructor(){super(...arguments),this.url="",this._linkPreviewProps=null}};s([ct()],ft.prototype,"url",2),s([ct({...ut,state:!0,attribute:!1})],ft.prototype,"_linkPreviewProps",2);var pt=class extends ft{firstUpdated(t){(async t=>(await fetch(`https://web-highlights.herokuapp.com/meta/${encodeURIComponent(t)}`)).json())(this.url).then((t=>{this._linkPreviewProps=t}))}render(){if(!this.url)return J`<div>No URL provided</div>`;if(!this._linkPreviewProps)return J`<div data-testid="loading">Loading...</div>`;const t=(i=function(t){return t?.replace(/https:\/\/|http:\/\/|www.|/gi,"")??""}(i=this.url),i=i?.split("/")[0],i??"");var i;return J`
       <figure part="link-card" class="previewbox-link-card">
         <a href=${this.url} part="link" class="link">
           <div class="kg-bookmark-content">
@@ -165,7 +165,7 @@
           </div>
         </a>
       </figure>
-    `}};ft.styles=dt,s([ct()],ft.prototype,"url",2),s([ct({...ut,state:!0,attribute:!1})],ft.prototype,"_linkPreviewProps",2),ft=s([(t=>(i,s)=>{void 0!==s?s.addInitializer((()=>{customElements.define(t,i)})):customElements.define(t,i)})("previewbox-link")],ft)})();
+    `}};pt.styles=dt,pt=s([(t=>(i,s)=>{void 0!==s?s.addInitializer((()=>{customElements.define(t,i)})):customElements.define(t,i)})("previewbox-link")],pt)})();
 /*! Bundled license information:
 
 @lit/reactive-element/css-tag.js:

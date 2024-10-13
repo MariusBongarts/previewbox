@@ -18,14 +18,14 @@ suite('previewbox-link', () => {
 
   test('renders a loading skeleton', async () => {
     const el = await fixture(
-      html`<previewbox-link url="https://web-highlights.com/"></previewbox-link>`
+      html`<previewbox-link href="https://web-highlights.com/"></previewbox-link>`
     );
     const loading = el.shadowRoot!.querySelector('[data-testid="loading"]')!;
     assert.equal(loading.textContent, 'Loading...');
   });
   test('renders a link with the url', async () => {
     const el = await fixture(
-      html`<previewbox-link url="https://web-highlights.com/"></previewbox-link>`
+      html`<previewbox-link href="https://web-highlights.com/"></previewbox-link>`
     );
     await wait(2000);
     const link = el.shadowRoot!.querySelector('a')!;

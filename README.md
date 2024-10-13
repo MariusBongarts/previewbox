@@ -41,10 +41,10 @@ import '@mariusbongarts/previewbox/dist/link';
 
 ## Usage
 
-To use the `<previewbox-link>` component, include it in your HTML and set the `url` attribute to the desired link:
+To use the `<previewbox-link>` component, include it in your HTML and set the `href` attribute to the desired link:
 
 ```html
-<previewbox-link url="https://web-highlights.com/about"></previewbox-link>
+<previewbox-link href="https://web-highlights.com/about"></previewbox-link>
 ```
 
 ## Demo

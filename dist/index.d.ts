@@ -1,3 +1,10 @@
+declare module "link.styles" {
+    export const styles: import("lit").CSSResult;
+}
+declare module "lib/util/url-helper" {
+    export function urlWithoutSchema(url?: string | null): string;
+    export function urlToOrigin(url?: string | null): string;
+}
 declare module "lib/domain/types" {
     interface OpenGraphImage {
         height?: string;
@@ -22,29 +29,43 @@ declare module "lib/adapters/meta-api/index" {
     import { LinkPreviewData } from "lib/domain/types";
     export const fetchLinkPreviewData: (url: string) => Promise<LinkPreviewData>;
 }
-declare module "link.styles" {
-    export const styles: import("lit").CSSResult;
-}
-declare module "lib/util/url-helper" {
-    export function urlWithoutSchema(url?: string | null): string;
-    export function urlToOrigin(url?: string | null): string;
+declare module "directives/base-directive" {
+    import { LitElement, PropertyValues } from 'lit';
+    import { LinkPreviewData } from "lib/domain/types";
+    export class BaseDirective extends LitElement {
+        /**
+         * The URL to fetch the meta data from. E.g. https://web-highlights.com/.
+         *
+         * Reads the open graph data from the provided URL.
+         */
+        href: string;
+        /**
+         * Manually set the URL without fetching the data from the provided href.
+         */
+        url: string;
+        /**
+         * The target attribute for the a-element. E.g. '_blank'.
+         */
+        target: string;
+        /**
+         * The rel attribute for the a-element. E.g. 'noopener noreferrer'.
+         */
+        rel: string;
+        protected _linkPreviewProps: LinkPreviewData | null;
+        protected firstUpdated(_changedProperties: PropertyValues): void;
+    }
 }
 declare module "link" {
-    import { LitElement, PropertyValues } from 'lit';
+    import { BaseDirective } from "directives/base-directive";
     /**
      * An example element.
      *
      * @slot - This element has a slot
      * @csspart link - The a-element that contains the link
+     * @part link-card - The figure element that contains the link card
      */
-    export class PreviewBoxLinkElement extends LitElement {
+    export class PreviewBoxLinkElement extends BaseDirective {
         static styles: import("lit").CSSResult;
-        /**
-         * The URL to fetch the meta data from. E.g. https://web-highlights.com/
-         */
-        url: string;
-        private _linkPreviewProps;
-        protected firstUpdated(_changedProperties: PropertyValues): void;
         render(): import("lit-html").TemplateResult<1>;
     }
     global {
