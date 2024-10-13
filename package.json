@@ -1,12 +1,13 @@
 {
-  "name": "previewbox",
-  "private": true,
-  "version": "0.0.1",
+  "name": "@mariusbongarts/previewbox",
+  "version": "0.0.3",
   "description": "A comprehensive web component suite for rendering link previews, complete with thumbnails, titles, authors, and Open Graph metadata integration.",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "author": "Marius Bongarts",
+  "license": "MIT",
   "scripts": {
     "dev": "concurrently \"npm run build:watch\" \"npm run serve\"",
     "build": "node scripts/build.js",
@@ -40,8 +41,6 @@
     "typescript",
     "lit"
   ],
-  "author": "Google LLC",
-  "license": "BSD-3-Clause",
   "dependencies": {
     "lit": "^3.2.0"
   },
