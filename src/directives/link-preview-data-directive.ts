@@ -1,10 +1,13 @@
 import {PropertyValues} from 'lit';
 import {property, state} from 'lit/decorators.js';
-import {LinkPreviewData} from '../lib/domain/types';
-import {fetchLinkPreviewData} from '../lib/adapters/meta-api';
+import {LinkPreviewData} from '../lib/domain/models/link-preview-data';
 import {AnchorElementDataDirective} from './anchor-element-data.directive';
 import {urlToOrigin} from '../lib/util/url-helper';
-import {ApiError, isSuccessResponse} from '../types/api-types';
+import {
+  ApiError,
+  fetchLinkPreviewData,
+  isSuccessResponse,
+} from '../lib/services/api-fetcher';
 
 /**
  * Directive that either fetches link preview data from an external URL or uses manually set properties.
@@ -73,7 +76,11 @@ export class LinkPreviewDataDirective extends AnchorElementDataDirective {
    * Defaults to the Previewbox API.
    */
   @property()
-  apiUrl: string = 'https://previewbox.link/api/v1/meta'; // 'http://localhost:2200/api/v1/meta';
+  apiUrl: string = window.location.origin.startsWith(
+    'http://localhost:8080/demo'
+  )
+    ? 'http://localhost:4444/v1/meta'
+    : 'https://previewbox.link/api/v1/meta';
 
   @state()
   protected fetchedLinkPreviewData: LinkPreviewData | null = null;

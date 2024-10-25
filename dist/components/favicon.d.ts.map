@@ -1,0 +1,1 @@
+{"version":3,"file":"favicon.d.ts","sourceRoot":"","sources":["../../src/components/favicon.ts"],"names":[],"mappings":"AAAA,OAAO,EAAO,UAAU,EAAC,MAAM,KAAK,CAAC;AAMrC,qBACa,wBAAyB,SAAQ,UAAU;IACtD,OAAgB,MAAM,0BAAU;IAGhC,UAAU,EAAE,MAAM,GAAG,IAAI,CAAQ;IAGjC,cAAc,UAAS;IAEd,MAAM;CAgBhB;AAED,OAAO,CAAC,MAAM,CAAC;IACX,UAAU,qBAAqB;QAC7B,oBAAoB,EAAE,wBAAwB,CAAC;KAChD;CACF"}

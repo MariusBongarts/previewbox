@@ -13,16 +13,17 @@
     "url": "https://github.com/MariusBongarts/previewbox"
   },
   "scripts": {
-    "dev": "concurrently \"npm run build:watch\" \"npm run serve\"",
+    "dev": "concurrently \"yarn start:server\" \"yarn build:watch\" \"yarn serve\"",
+    "start:server": "yarn --cwd server start",
     "build": "node scripts/build.js",
     "publish": "npm publish --access public",
-    "build:watch": "npm run build -- --watch",
+    "build:watch": "yarn build -- --watch",
     "clean": "rimraf index.{d.ts,d.ts.map,js,js.map} test/index.{d.ts,d.ts.map,js,js.map} test/index_test.{d.ts,d.ts.map,js,js.map}",
-    "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
+    "lint": "yarn lint:lit-analyzer && yarn lint:eslint",
     "lint:eslint": "eslint 'src/**/*.ts'",
     "lint:lit-analyzer": "lit-analyzer",
     "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
-    "docs": "npm run docs:clean && npm run build && npm run analyze && npm run docs:build && npm run docs:assets && npm run docs:gen",
+    "docs": "yarn docs:clean && yarn build && yarn analyze && yarn docs:build && yarn docs:assets && yarn docs:gen",
     "docs:clean": "rimraf docs",
     "docs:gen": "eleventy --config=.eleventy.cjs",
     "docs:gen:watch": "eleventy --config=.eleventy.cjs --watch",
@@ -32,8 +33,8 @@
     "analyze": "cem analyze --litelement --globs \"src/**/*.ts\"",
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "serve": "wds --watch",
-    "serve:prod": "MODE=prod npm run serve",
-    "test": "npm run test:dev && npm run test:prod",
+    "serve:prod": "MODE=prod yarn serve",
+    "test": "yarn test:dev && yarn test:prod",
     "test:dev": "wtr",
     "test:watch": "wtr --watch",
     "test:prod": "MODE=prod wtr",
@@ -68,12 +69,14 @@
     "concurrently": "^9.0.1",
     "esbuild": "^0.24.0",
     "eslint": "^8.15.0",
+    "kill-port": "^2.0.1",
     "lit-analyzer": "^1.2.1",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "rollup": "^4.18.0",
     "rollup-plugin-summary": "^2.0.1",
-    "typescript": "~5.5.0"
+    "typescript": "^5.6.3",
+    "wait-on": "^8.0.1"
   },
   "customElements": "custom-elements.json"
 }

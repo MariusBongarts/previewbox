@@ -1,7 +1,7 @@
 declare module "link.styles" {
     export const styles: import("lit").CSSResult;
 }
-declare module "lib/domain/types" {
+declare module "lib/domain/models/link-preview-data" {
     export interface LinkPreviewData {
         title: string | null;
         imageUrl: string | null;
@@ -13,53 +13,6 @@ declare module "lib/domain/types" {
         date: string | null;
         origin: string | null;
     }
-}
-declare module "types/api-types" {
-    export enum ApiError {
-        API_LIMIT_REACHED = "API_LIMIT_REACHED",
-        UNKNOWN_ERROR = "UNKNOWN_ERROR"
-    }
-    type ApiSuccessResponse<T> = {
-        data: T;
-    };
-    type ApiErrorResponse = {
-        error: ApiError;
-    };
-    export type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
-    export function isSuccessResponse<T>(response: ApiResponse<T>): response is ApiSuccessResponse<T>;
-    export interface OpenGraphImage {
-        height?: number;
-        type?: string;
-        url: string;
-        width?: number;
-        alt?: string;
-    }
-    export interface OpenGraphMetaData {
-        title?: string;
-        image?: OpenGraphImage;
-        description?: string;
-        url?: string;
-        type?: string;
-        author?: string;
-        favicon?: string;
-        date?: string;
-    }
-}
-declare module "lib/util/url-helper" {
-    export function urlWithoutSchema(url?: string | null): string;
-    export function urlToOrigin(url?: string | null): string;
-}
-declare module "lib/adapters/meta-api/mapper" {
-    import { OpenGraphMetaData } from "types/api-types";
-    import { LinkPreviewData } from "lib/domain/types";
-    export const mapLinkMetaDataToLinkPreviewData: (data: OpenGraphMetaData) => LinkPreviewData;
-}
-declare module "lib/adapters/meta-api/index" {
-    import { ApiResponse } from "types/api-types";
-    import { LinkPreviewData } from "lib/domain/types";
-    export const fetchLinkPreviewData: (url: string, options: {
-        apiUrl: string;
-    }) => Promise<ApiResponse<LinkPreviewData>>;
 }
 declare module "directives/anchor-element-data.directive" {
     import { LitElement } from 'lit';
@@ -83,11 +36,58 @@ declare module "directives/anchor-element-data.directive" {
         rel: string;
     }
 }
+declare module "lib/util/url-helper" {
+    export function urlWithoutSchema(url?: string | null): string;
+    export function urlToOrigin(url?: string | null): string;
+}
+declare module "lib/adapters/meta-api/model/open-graph-meta-data" {
+    export interface OpenGraphImage {
+        height?: number;
+        type?: string;
+        url: string;
+        width?: number;
+        alt?: string;
+    }
+    export interface OpenGraphMetaData {
+        url: string | null;
+        title?: string | null;
+        description?: string | null;
+        image?: OpenGraphImage;
+        author?: string | null;
+        favicon?: string | null;
+        date?: string | null;
+        origin?: string | null;
+        type?: string | null;
+    }
+}
+declare module "lib/adapters/meta-api/mapper/open-graph-meta-data-mapper" {
+    import { LinkPreviewData } from "lib/domain/models/link-preview-data";
+    import { OpenGraphMetaData } from "lib/adapters/meta-api/model/open-graph-meta-data";
+    export const mapLinkMetaDataToLinkPreviewData: (data: OpenGraphMetaData) => LinkPreviewData;
+}
+declare module "lib/services/api-fetcher" {
+    import { LinkPreviewData } from "lib/domain/models/link-preview-data";
+    export enum ApiError {
+        API_LIMIT_REACHED = "API_LIMIT_REACHED",
+        UNKNOWN_ERROR = "UNKNOWN_ERROR"
+    }
+    type ApiSuccessResponse<T> = {
+        data: T;
+    };
+    type ApiErrorResponse = {
+        error: ApiError;
+    };
+    export type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
+    export function isSuccessResponse<T>(response: ApiResponse<T>): response is ApiSuccessResponse<T>;
+    export const fetchLinkPreviewData: (url: string, options: {
+        apiUrl: string;
+    }) => Promise<ApiResponse<LinkPreviewData>>;
+}
 declare module "directives/link-preview-data-directive" {
     import { PropertyValues } from 'lit';
-    import { LinkPreviewData } from "lib/domain/types";
+    import { LinkPreviewData } from "lib/domain/models/link-preview-data";
     import { AnchorElementDataDirective } from "directives/anchor-element-data.directive";
-    import { ApiError } from "types/api-types";
+    import { ApiError } from "lib/services/api-fetcher";
     /**
      * Directive that either fetches link preview data from an external URL or uses manually set properties.
      */
@@ -288,26 +288,6 @@ declare module "link" {
 }
 declare module "index" {
     export * from "link";
-}
-declare module "lib/adapters/meta-api/types" {
-    interface OpenGraphImage {
-        height?: string;
-        type: string;
-        url: string;
-        width?: string;
-    }
-    export interface LinkMetaData {
-        title?: string;
-        image?: OpenGraphImage & {
-            alt?: string;
-        };
-        description?: string;
-        url?: string;
-        type?: string;
-        author?: string;
-        favicon?: string;
-        date?: string;
-    }
 }
 declare module "test/test-utils" {
     export const wait: (ms: number) => Promise<unknown>;

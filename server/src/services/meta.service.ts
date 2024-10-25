@@ -1,0 +1,43 @@
+import NodeCache from 'node-cache';
+import ogs from 'open-graph-scraper';
+import {mapOpenGraphResultToMetaData} from '../lib/adapters/open-graph-scraper/mapper/open-graph-adapter';
+import {LinkPreviewData} from '../lib/domain/models/link-preview-data';
+
+export class MetaService {
+  private cache = new NodeCache({stdTTL: 60 * 60});
+
+  private readFromCache(url: string): LinkPreviewData | undefined {
+    const resultFromCache = this.cache.get<LinkPreviewData>(url);
+    if (resultFromCache) {
+      console.log(
+        `[CACHE]: Read data for url: ${url}`
+      );
+    }
+    return resultFromCache;
+  }
+
+  public async getOpenGraphData(url: string): Promise<LinkPreviewData> {
+    try {
+      const resultFromCache = this.readFromCache(url);
+      if (resultFromCache) {
+        return resultFromCache;
+      }
+      const {error, result} = await ogs({url});
+
+      if (error || !result?.success) {
+        console.error(`${url}: ${result?.error}`);
+        return {url};
+      }
+
+      const metaData: LinkPreviewData = mapOpenGraphResultToMetaData(
+        result,
+        url
+      );
+      console.log(`Fetched data for url: ${url}`);
+      this.cache.set(url, metaData);
+      return metaData;
+    } catch (error) {
+      return {url};
+    }
+  }
+}

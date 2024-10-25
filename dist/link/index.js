@@ -753,64 +753,6 @@
 
 `;
 
-  // src/types/api-types.ts
-  function isSuccessResponse(response) {
-    return "data" in response;
-  }
-
-  // src/lib/util/url-helper.ts
-  function urlWithoutSchema(url) {
-    return url?.replace(/https:\/\/|http:\/\/|www.|/gi, "") ?? "";
-  }
-  function urlToOrigin(url) {
-    try {
-      url = urlWithoutSchema(url);
-      url = url?.split("/")[0];
-      return url ?? "";
-    } catch (error) {
-      return url ?? "";
-    }
-  }
-
-  // src/lib/adapters/meta-api/mapper.ts
-  var mapLinkMetaDataToLinkPreviewData = (data) => {
-    return {
-      title: data.title ?? null,
-      imageUrl: data.image?.url ?? null,
-      imageAlt: data.image?.alt ?? null,
-      description: data.description ?? null,
-      url: data.url ?? null,
-      author: data.author ?? null,
-      favicon: data.favicon ?? null,
-      date: data.date ?? null,
-      origin: urlToOrigin(data.url) ?? null
-    };
-  };
-
-  // src/lib/adapters/meta-api/index.ts
-  var fetchLinkPreviewData = async (url, options) => {
-    try {
-      const response = await fetch(
-        `${options.apiUrl}?url=${encodeURIComponent(url)}`,
-        {
-          headers: {
-            origin: window.location.origin
-          }
-        }
-      );
-      if (!response.ok) {
-        if (response.status === 429) {
-          return { error: "API_LIMIT_REACHED" /* API_LIMIT_REACHED */ };
-        }
-        return { error: "UNKNOWN_ERROR" /* UNKNOWN_ERROR */ };
-      }
-      const linkMetaData = await response.json();
-      return { data: mapLinkMetaDataToLinkPreviewData(linkMetaData) };
-    } catch (error) {
-      return { error: "UNKNOWN_ERROR" /* UNKNOWN_ERROR */ };
-    }
-  };
-
   // src/directives/anchor-element-data.directive.ts
   var AnchorElementDataDirective = class extends h3 {
     constructor() {
@@ -830,6 +772,62 @@
     n4()
   ], AnchorElementDataDirective.prototype, "rel", 2);
 
+  // src/lib/util/url-helper.ts
+  function urlWithoutSchema(url) {
+    return url?.replace(/https:\/\/|http:\/\/|www.|/gi, "") ?? "";
+  }
+  function urlToOrigin(url) {
+    try {
+      url = urlWithoutSchema(url);
+      url = url?.split("/")[0];
+      return url ?? "";
+    } catch (error) {
+      return url ?? "";
+    }
+  }
+
+  // src/lib/adapters/meta-api/mapper/open-graph-meta-data-mapper.ts
+  var mapLinkMetaDataToLinkPreviewData = (data) => {
+    return {
+      title: data.title ?? null,
+      imageUrl: data.image?.url ?? null,
+      imageAlt: data.image?.alt ?? null,
+      description: data.description ?? null,
+      url: data.url ?? null,
+      author: data.author ?? null,
+      favicon: data.favicon ?? null,
+      date: data.date ?? null,
+      origin: urlToOrigin(data.url) ?? null
+    };
+  };
+
+  // src/lib/services/api-fetcher.ts
+  function isSuccessResponse(response) {
+    return "data" in response;
+  }
+  var fetchLinkPreviewData = async (url, options) => {
+    try {
+      const response = await fetch(
+        `${options.apiUrl}?url=${encodeURIComponent(url)}`,
+        {
+          headers: {
+            origin: window.location.origin
+          }
+        }
+      );
+      if (!response.ok) {
+        if (response.status === 429) {
+          return { error: "API_LIMIT_REACHED" /* API_LIMIT_REACHED */ };
+        }
+        return { error: "UNKNOWN_ERROR" /* UNKNOWN_ERROR */ };
+      }
+      const openGraphMetaData = await response.json();
+      return { data: mapLinkMetaDataToLinkPreviewData(openGraphMetaData) };
+    } catch (error) {
+      return { error: "UNKNOWN_ERROR" /* UNKNOWN_ERROR */ };
+    }
+  };
+
   // src/directives/link-preview-data-directive.ts
   var LinkPreviewDataDirective = class extends AnchorElementDataDirective {
     constructor() {
@@ -843,7 +841,7 @@
       this.faviconUrl = null;
       this.date = null;
       this.hidePoweredBy = void 0;
-      this.apiUrl = "https://previewbox.link/api/v1/meta";
+      this.apiUrl = window.location.origin.startsWith("http://localhost") ? "http://localhost:4444/v1/meta" : "https://previewbox.link/api/v1/meta";
       this.fetchedLinkPreviewData = null;
       this._isLoading = false;
       this._isError = false;

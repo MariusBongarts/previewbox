@@ -9,23 +9,51 @@ on:
       - main
 
 jobs:
-  install-build-test:
+  components:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '22'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
-    - name: Install
-      run: npm install
+      - name: Install
+        run: yarn
 
-    - name: Build
-      run: npm run build
+      - name: Build
+        run: |
+          yarn build
 
-    # - name: Test
-    #   run: npm test
+      - name: Test components
+        run: |
+          npx playwright install
+          npx playwright install-deps
+          yarn test
+
+  server:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install
+        run: yarn
+        working-directory: server
+
+      - name: Build
+        run: yarn build
+        working-directory: server
+
+      - name: Test Server
+        run: yarn test
+        working-directory: server

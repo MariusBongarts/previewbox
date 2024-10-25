@@ -8,7 +8,7 @@ import './components/limit-info';
 import './components/powered-by-previewbox';
 import './components/favicon';
 import './components/image';
-import {ApiError} from './types/api-types';
+import { ApiError } from './lib/services/api-fetcher';
 
 /**
  * Previewbox Link
