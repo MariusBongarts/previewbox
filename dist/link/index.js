@@ -604,35 +604,36 @@
     box-sizing: border-box;
     width: 100%;
     font-family: inherit;
-    --background-color: #ffffff;
-    --text-color: #000000;
-    --border-color: rgb(124 139 154 / 25%);
-    --metadata-color: rgba(0, 0, 0, 0.7);
-    --dark-background-color: #121212;
-    --dark-text-color: #e0e0e0;
-    --dark-border-color: #8080803a;
-    --dark-metadata-color: rgba(255, 255, 255, 0.7);
-    --skeleton-color: rgb(229, 231, 235);
-    --dark-skeleton-color: rgb(55, 65, 81);
-    --fallback-img-color: hsl(220, 13%, 80%);
-    --fallback-img-background: rgb(229, 231, 235);
-    --dark-fallback-img-color: hsl(220, 13%, 40%);
-    --dark-fallback-img-background: rgb(55, 65, 81);
-    --favicon-size: 20px;
+    --pb-background-color: #ffffff;
+    --pb-dark-background-color: #121212;
+    --pb-text-color: #000000;
+    --pb-border-color: rgb(124 139 154 / 25%);
+    --pb-metadata-color: rgba(0, 0, 0, 0.7);
+    --pb-dark-text-color: #e0e0e0;
+    --pb-dark-border-color: #8080803a;
+    --pb-dark-metadata-color: rgba(255, 255, 255, 0.7);
+    --pb-skeleton-color: rgb(229, 231, 235);
+    --pb-dark-skeleton-color: rgb(55, 65, 81);
+    --pb-fallback-img-color: hsl(220, 13%, 80%);
+    --pb-fallback-img-background: rgb(229, 231, 235);
+    --pb-dark-fallback-img-color: hsl(220, 13%, 40%);
+    --pb-dark-fallback-img-background: rgb(55, 65, 81);
+    --pb-favicon-size: 20px;
   }
 
-  .previewbox-link-card {
+  .container {
     margin: 0;
     padding: 0;
-    background-color: var(--background-color, red);
+    background-color: var(--pb-background-color);
     overflow: hidden;
     border-radius: 3px;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--pb-border-color);
+    position: relative;
   }
 
-  .link {
+  .previewbox-link {
     text-decoration: none;
-    color: var(--text-color);
+    color: var(--pb-text-color);
     display: flex;
     text-decoration: none;
     color: inherit;
@@ -647,6 +648,7 @@
     justify-content: flex-start;
     padding: 20px;
     overflow: hidden;
+    position: relative;
   }
 
   .previewbox-title {
@@ -660,7 +662,7 @@
       line-height: 1.4;
       height: 24px;
     }
-    color: var(--text-color);
+    color: var(--pb-text-color);
   }
 
   .previewbox-description {
@@ -675,7 +677,7 @@
     opacity: 0.7;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    color: var(--metadata-color);
+    color: var(--pb-metadata-color);
   }
 
   .previewbox-metadata {
@@ -687,7 +689,7 @@
     font-size: 0.75rem;
     font-weight: 500;
     white-space: nowrap;
-    color: var(--metadata-color);
+    color: var(--pb-metadata-color);
     .previewbox-metadata-skeleton {
       display: flex;
       column-gap: 4px;
@@ -698,8 +700,8 @@
       }
     }
     svg {
-      width: var(--favicon-size);
-      height: var(--favicon-size);
+      width: var(--pb-favicon-size);
+      height: var(--pb-favicon-size);
       margin-right: 6px;
     }
   }
@@ -714,13 +716,11 @@
     text-overflow: ellipsis;
   }
 
-  .previewbox-metadata > :not(img) {
+  .previewbox-metadata > :not(previewbox-favicon) {
     opacity: 0.7;
   }
 
-  .previewbox-favicon {
-    width: var(--favicon-size);
-    height: var(--favicon-size);
+  previewbox-favicon {
     margin-right: 6px;
   }
 
@@ -728,69 +728,35 @@
     position: relative;
     flex-grow: 1;
     min-width: 33%;
-    img,
-    previewbox-skeleton-shape,
-    .fallback-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      position: absolute;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      top: 0;
-      left: 0;
-      border-radius: 0 2px 2px 0;
-      margin: 0;
-      background-color: var(--fallback-img-background);
-
-      @media (prefers-color-scheme: dark) {
-        background-color: var(--dark-fallback-img-background);
-      }
-
-      svg {
-        width: 40px;
-        height: 40px;
-        color: var(--fallback-img-color);
-      }
-
-      @media (prefers-color-scheme: dark) {
-        svg {
-          color: var(--dark-fallback-img-color);
-        }
-      }
-    }
   }
 
   @media (prefers-color-scheme: dark) {
     :host {
-      --background-color: var(--dark-background-color);
-      --text-color: var(--dark-text-color);
-      --border-color: var(--dark-border-color);
-      --metadata-color: var(--dark-metadata-color);
-    }
-
-    .link {
-      border: 1px solid var(--dark-border-color);
-    }
-
-    a {
-      border: 1px solid var(--dark-border-color);
+      --pb-background-color: var(--pb-dark-background-color);
+      --pb-text-color: var(--pb-dark-text-color);
+      --pb-border-color: var(--pb-dark-border-color);
+      --pb-metadata-color: var(--pb-dark-metadata-color);
     }
 
     .previewbox-title {
-      color: var(--dark-text-color);
+      color: var(--pb-dark-text-color);
     }
 
     .previewbox-description {
-      color: var(--dark-metadata-color);
+      color: var(--pb-dark-metadata-color);
     }
 
     .previewbox-metadata {
-      color: var(--dark-metadata-color);
+      color: var(--pb-dark-metadata-color);
     }
   }
+
 `;
+
+  // src/types/api-types.ts
+  function isSuccessResponse(response) {
+    return "data" in response;
+  }
 
   // src/lib/util/url-helper.ts
   function urlWithoutSchema(url) {
@@ -822,12 +788,27 @@
   };
 
   // src/lib/adapters/meta-api/index.ts
-  var fetchLinkPreviewData = async (url) => {
-    const response = await fetch(
-      `https://web-highlights.herokuapp.com/meta/${encodeURIComponent(url)}`
-    );
-    const linkMetaData = await response.json();
-    return mapLinkMetaDataToLinkPreviewData(linkMetaData);
+  var fetchLinkPreviewData = async (url, options) => {
+    try {
+      const response = await fetch(
+        `${options.apiUrl}?url=${encodeURIComponent(url)}`,
+        {
+          headers: {
+            origin: window.location.origin
+          }
+        }
+      );
+      if (!response.ok) {
+        if (response.status === 429) {
+          return { error: "API_LIMIT_REACHED" /* API_LIMIT_REACHED */ };
+        }
+        return { error: "UNKNOWN_ERROR" /* UNKNOWN_ERROR */ };
+      }
+      const linkMetaData = await response.json();
+      return { data: mapLinkMetaDataToLinkPreviewData(linkMetaData) };
+    } catch (error) {
+      return { error: "UNKNOWN_ERROR" /* UNKNOWN_ERROR */ };
+    }
   };
 
   // src/directives/anchor-element-data.directive.ts
@@ -861,9 +842,12 @@
       this.imageAlt = null;
       this.faviconUrl = null;
       this.date = null;
+      this.hidePoweredBy = void 0;
+      this.apiUrl = "https://previewbox.link/api/v1/meta";
       this.fetchedLinkPreviewData = null;
       this._isLoading = false;
       this._isError = false;
+      this._apiError = null;
     }
     get linkData() {
       if (this.fetchedLinkPreviewData) {
@@ -893,13 +877,19 @@
     }
     _fetchLinkPreviewData() {
       this._isLoading = true;
-      fetchLinkPreviewData(this.href).then((data) => {
-        this.fetchedLinkPreviewData = data;
+      fetchLinkPreviewData(this.href, { apiUrl: this.apiUrl }).then((response) => {
+        if (isSuccessResponse(response)) {
+          this.fetchedLinkPreviewData = response.data;
+        } else {
+          this._isError = true;
+          this._apiError = response.error;
+        }
       }).catch((error) => {
         console.error(
           `Error fetching link preview data for ${this.href}: ${error}`
         );
         this._isError = true;
+        this._apiError = "UNKNOWN_ERROR" /* UNKNOWN_ERROR */;
       }).finally(() => {
         this._isLoading = false;
       });
@@ -948,6 +938,12 @@
     n4()
   ], LinkPreviewDataDirective.prototype, "date", 2);
   __decorateClass([
+    n4()
+  ], LinkPreviewDataDirective.prototype, "hidePoweredBy", 2);
+  __decorateClass([
+    n4()
+  ], LinkPreviewDataDirective.prototype, "apiUrl", 2);
+  __decorateClass([
     r4()
   ], LinkPreviewDataDirective.prototype, "fetchedLinkPreviewData", 2);
   __decorateClass([
@@ -956,6 +952,9 @@
   __decorateClass([
     r4()
   ], LinkPreviewDataDirective.prototype, "_isError", 2);
+  __decorateClass([
+    r4()
+  ], LinkPreviewDataDirective.prototype, "_apiError", 2);
 
   // src/lib/util/test-helper.ts
   var TEST_IDS = {
@@ -963,10 +962,11 @@
     FAVICON: "FAVICON",
     FAVICON_SKELETON: "FAVICON_SKELETON",
     FAVICON_FALLBACK: "FAVICON_FALLBACK",
-    THUMBNAIL: "THUMBNAIL",
-    THUMBNAIL_SKELETON: "THUMBNAIL_SKELETON",
-    THUMBNAIL_FALLBACK: "THUMBNAIL_FALLBACK",
+    IMAGE: "IMAGE",
+    IMAGE_SKELETON: "IMAGE_SKELETON",
+    IMAGE_FALLBACK: "IMAGE_FALLBACK",
     AUTHOR: "AUTHOR",
+    DATE: "DATE",
     ORIGIN: "PUBLISHER",
     ANCHOR_ELEMENT: "ANCHOR_ELEMENT",
     TITLE: "TITLE",
@@ -983,7 +983,7 @@
   }
 
   .skeleton-shape {
-    background-color: var(--skeleton-color);
+    background-color: var(--pb-skeleton-color);
     animation: pulse 1.5s infinite ease-in-out;
     display: flex;
     align-items: center;
@@ -1002,7 +1002,7 @@
 
   @media (prefers-color-scheme: dark) {
     :host {
-      --skeleton-color: var(--dark-skeleton-color);
+      --skeleton-color: var(--pb-dark-skeleton-color);
     }
   }
 `;
@@ -1036,6 +1036,108 @@
     t2("previewbox-skeleton-shape")
   ], PreviewBoxSkeletonShapeElement);
 
+  // src/components/limit-info.styles.ts
+  var styles3 = i`
+  :host {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #000000b5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+
+  .limit-info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    row-gap: 8px;
+  }
+
+  .limit-info-text {
+    color: white;
+  }
+
+  .limit-info-cta {
+    color: white;
+    text-decoration: none;
+    background-color: #5046e5;
+    padding: 8px 16px;
+    border-radius: 4px;
+  }
+`;
+
+  // src/components/limit-info.ts
+  var PreviewBoxLimitInfoElement = class extends h3 {
+    render() {
+      const domain = window.location.origin;
+      return ke`<div class="limit-info-container">
+      <span class="limit-info-text"
+        >You've reached the API limit for ${domain}</span
+      >
+      <a
+        class="limit-info-cta"
+        target="_blank"
+        href="https://previewbox.link/usage/${encodeURIComponent(domain)}"
+        >Check Usage</a
+      >
+    </div>`;
+    }
+  };
+  PreviewBoxLimitInfoElement.styles = styles3;
+  PreviewBoxLimitInfoElement = __decorateClass([
+    t2("previewbox-limit-info")
+  ], PreviewBoxLimitInfoElement);
+
+  // src/components/powered-by-previewbox.styles.ts
+  var styles4 = i`
+  .powered-by {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    font-size: 9.5px;
+    color: #000000;
+    background-color: #ffffff7d;
+    padding: 1px 2px;
+    z-index: 2;
+    border-radius: 2px;
+    line-height: 1.2;
+
+    a {
+      color: #000000;
+      font-weight: bold;
+      text-decoration: none;
+    }
+  }
+`;
+
+  // src/components/powered-by-previewbox.ts
+  var PoweredByPreviewBoxElement = class extends h3 {
+    render() {
+      return ke`<span class="powered-by">
+      Powered by
+      <a href="https://previewbox.link">Previewbox</a>
+    </span> `;
+    }
+  };
+  PoweredByPreviewBoxElement.styles = styles4;
+  PoweredByPreviewBoxElement = __decorateClass([
+    t2("powered-by-previewbox")
+  ], PoweredByPreviewBoxElement);
+
+  // src/components/favivon.styles.ts
+  var styles5 = i`
+  .previewbox-favicon {
+    width: var(--pb-favicon-size);
+    height: var(--pb-favicon-size);
+  }
+`;
+
   // src/templates/index.ts
   var fallbackImage = ke`<svg
   aria-hidden="true"
@@ -1065,6 +1167,131 @@
   />
 </svg> `;
 
+  // src/components/favicon.ts
+  var PreviewBoxFaviconElement = class extends h3 {
+    constructor() {
+      super(...arguments);
+      this.faviconUrl = null;
+      this.isFaviconError = false;
+    }
+    render() {
+      return ke`
+    ${this.faviconUrl && !this.isFaviconError ? ke`
+          <img
+            data-testid="${TEST_IDS.FAVICON}"
+            class="previewbox-favicon"
+            part="favicon"
+            src=${this.faviconUrl ?? ""}
+            alt="Favicon"
+            @error=${() => this.isFaviconError = true}
+          />
+        ` : fallbackFavicon}
+    `;
+    }
+  };
+  PreviewBoxFaviconElement.styles = styles5;
+  __decorateClass([
+    n4()
+  ], PreviewBoxFaviconElement.prototype, "faviconUrl", 2);
+  __decorateClass([
+    r4()
+  ], PreviewBoxFaviconElement.prototype, "isFaviconError", 2);
+  PreviewBoxFaviconElement = __decorateClass([
+    t2("previewbox-favicon")
+  ], PreviewBoxFaviconElement);
+
+  // src/components/image.styles.ts
+  var styles6 = i`
+  img,
+  previewbox-skeleton-shape,
+  .fallback-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    border-radius: 0 2px 2px 0;
+    margin: 0;
+    background-color: var(--pb-fallback-img-background);
+
+    @media (prefers-color-scheme: dark) {
+      background-color: var(--pb-dark-fallback-img-background);
+    }
+
+    svg {
+      width: 40px;
+      height: 40px;
+      color: var(--pb-fallback-img-color);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      svg {
+        color: var(--pb-dark-fallback-img-color);
+      }
+    }
+  }
+`;
+
+  // src/components/image.ts
+  var PreviewBoxImageElement = class extends h3 {
+    constructor() {
+      super(...arguments);
+      this.imageUrl = null;
+      this.imageAlt = null;
+      this.isLoading = true;
+      this.isImageError = false;
+    }
+    render() {
+      if (this.isLoading) {
+        return ke`<previewbox-skeleton-shape
+        height="100%"
+        data-testid="${TEST_IDS.IMAGE_SKELETON}"
+      >
+        ${fallbackImage}
+      </previewbox-skeleton-shape>`;
+      }
+      return ke`
+      ${this.imageUrl && !this.isImageError ? ke`
+            <img
+              data-testid="${TEST_IDS.IMAGE}"
+              part="image"
+              src=${this.imageUrl ?? ""}
+              alt=${this.imageAlt ?? "Thumbnail image"}
+              @error=${() => this.isImageError = true}
+            />
+          ` : ke`
+            <figure
+              class="fallback-img"
+              part="image"
+              data-testid="${TEST_IDS.IMAGE_FALLBACK}"
+            >
+              ${fallbackImage}
+            </figure>
+          `}
+    `;
+    }
+  };
+  PreviewBoxImageElement.styles = styles6;
+  __decorateClass([
+    n4()
+  ], PreviewBoxImageElement.prototype, "imageUrl", 2);
+  __decorateClass([
+    n4()
+  ], PreviewBoxImageElement.prototype, "imageAlt", 2);
+  __decorateClass([
+    n4({ type: Boolean })
+  ], PreviewBoxImageElement.prototype, "isLoading", 2);
+  __decorateClass([
+    r4()
+  ], PreviewBoxImageElement.prototype, "isImageError", 2);
+  PreviewBoxImageElement = __decorateClass([
+    t2("previewbox-image")
+  ], PreviewBoxImageElement);
+
   // src/link.ts
   var PreviewBoxLinkElement = class extends LinkPreviewDataDirective {
     constructor() {
@@ -1074,13 +1301,14 @@
     }
     render() {
       return ke`
-      <figure part="link-card" class="previewbox-link-card">
+      <figure part="container" class="container">
+        ${this._apiError === "API_LIMIT_REACHED" /* API_LIMIT_REACHED */ ? ke`<previewbox-limit-info></previewbox-limit-info>` : ""}
         <a
           href=${this.linkData.url || this.href}
           target=${this.target}
           part="link"
           rel=${this.rel}
-          class="link"
+          class="previewbox-link"
           data-testid="${TEST_IDS.ANCHOR_ELEMENT}"
         >
           <div class="previewbox-content">
@@ -1131,15 +1359,9 @@
                       ></previewbox-skeleton-shape>
                     </div>
                   ` : ke`
-                    ${this.linkData?.favicon && !this.isFaviconError ? ke`
-                          <img
-                            data-testid="${TEST_IDS.FAVICON}"
-                            class="previewbox-favicon"
-                            src=${this.linkData.favicon ?? ""}
-                            alt="Favicon of ${this.linkData.origin}"
-                            @error=${() => this.isFaviconError = true}
-                          />
-                        ` : fallbackFavicon}
+                    <previewbox-favicon
+                      .faviconUrl=${this.linkData.favicon}
+                    ></previewbox-favicon>
                     <span data-testid="${TEST_IDS.ORIGIN}"
                       >${this.linkData.origin}</span
                     >${this.linkData.author ? ke`<span data-testid="${TEST_IDS.AUTHOR}"
@@ -1149,30 +1371,14 @@
             </div>
           </div>
           <div class="previewbox-thumbnail">
-            ${this._isLoading ? ke`<previewbox-skeleton-shape
-                  height="100%"
-                  data-testid="${TEST_IDS.THUMBNAIL_SKELETON}"
-                >
-                  ${fallbackImage}
-                </previewbox-skeleton-shape>` : ke`
-                  ${this.linkData?.imageUrl && !this.isImgError ? ke`
-                        <img
-                          data-testid="${TEST_IDS.THUMBNAIL}"
-                          src=${this.linkData?.imageUrl ?? ""}
-                          alt=${this.linkData?.imageAlt ?? "Thumbnail image of " + this.url}
-                          @error=${() => this.isImgError = true}
-                        />
-                      ` : ke`
-                        <figure
-                          class="fallback-img"
-                          data-testid="${TEST_IDS.THUMBNAIL_FALLBACK}"
-                        >
-                          ${fallbackImage}
-                        </figure>
-                      `}
-                `}
+            <previewbox-image
+              .isLoading=${this._isLoading}
+              .imageUrl=${this.linkData?.imageUrl}
+              .imageAlt=${this.linkData?.imageAlt}
+            ></previewbox-image>
           </div>
         </a>
+        ${typeof this.hidePoweredBy !== "undefined" ? "" : ke`<powered-by-previewbox></powered-by-previewbox>`}
       </figure>
     `;
     }

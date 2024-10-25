@@ -1,7 +1,6 @@
 import {html, LitElement} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import {styles} from './skeleton-shape.styles';
-import {PreviewBoxLinkElement} from '../link';
 
 /**
  * An example element.
@@ -34,6 +33,6 @@ export class PreviewBoxSkeletonShapeElement extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'previewbox-skeleton-shape': PreviewBoxLinkElement;
+    'previewbox-skeleton-shape': PreviewBoxSkeletonShapeElement;
   }
 }

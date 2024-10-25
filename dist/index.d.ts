@@ -15,17 +15,28 @@ declare module "lib/domain/types" {
     }
 }
 declare module "types/api-types" {
-    interface OpenGraphImage {
-        height?: string;
-        type: string;
-        url: string;
-        width?: string;
+    export enum ApiError {
+        API_LIMIT_REACHED = "API_LIMIT_REACHED",
+        UNKNOWN_ERROR = "UNKNOWN_ERROR"
     }
-    export interface LinkMetaData {
+    type ApiSuccessResponse<T> = {
+        data: T;
+    };
+    type ApiErrorResponse = {
+        error: ApiError;
+    };
+    export type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
+    export function isSuccessResponse<T>(response: ApiResponse<T>): response is ApiSuccessResponse<T>;
+    export interface OpenGraphImage {
+        height?: number;
+        type?: string;
+        url: string;
+        width?: number;
+        alt?: string;
+    }
+    export interface OpenGraphMetaData {
         title?: string;
-        image?: OpenGraphImage & {
-            alt?: string;
-        };
+        image?: OpenGraphImage;
         description?: string;
         url?: string;
         type?: string;
@@ -39,13 +50,16 @@ declare module "lib/util/url-helper" {
     export function urlToOrigin(url?: string | null): string;
 }
 declare module "lib/adapters/meta-api/mapper" {
-    import { LinkMetaData } from "types/api-types";
+    import { OpenGraphMetaData } from "types/api-types";
     import { LinkPreviewData } from "lib/domain/types";
-    export const mapLinkMetaDataToLinkPreviewData: (data: LinkMetaData) => LinkPreviewData;
+    export const mapLinkMetaDataToLinkPreviewData: (data: OpenGraphMetaData) => LinkPreviewData;
 }
 declare module "lib/adapters/meta-api/index" {
+    import { ApiResponse } from "types/api-types";
     import { LinkPreviewData } from "lib/domain/types";
-    export const fetchLinkPreviewData: (url: string) => Promise<LinkPreviewData>;
+    export const fetchLinkPreviewData: (url: string, options: {
+        apiUrl: string;
+    }) => Promise<ApiResponse<LinkPreviewData>>;
 }
 declare module "directives/anchor-element-data.directive" {
     import { LitElement } from 'lit';
@@ -73,6 +87,7 @@ declare module "directives/link-preview-data-directive" {
     import { PropertyValues } from 'lit';
     import { LinkPreviewData } from "lib/domain/types";
     import { AnchorElementDataDirective } from "directives/anchor-element-data.directive";
+    import { ApiError } from "types/api-types";
     /**
      * Directive that either fetches link preview data from an external URL or uses manually set properties.
      */
@@ -112,9 +127,20 @@ declare module "directives/link-preview-data-directive" {
          * A manually set date for the link preview.
          */
         date: string | null;
+        /**
+         * If set to true, the Powered by Previewbox info will not be shown.
+         */
+        hidePoweredBy: string | undefined;
+        /**
+         * The URL of the API to fetch the link preview data from.
+         *
+         * Defaults to the Previewbox API.
+         */
+        apiUrl: string;
         protected fetchedLinkPreviewData: LinkPreviewData | null;
         protected _isLoading: boolean;
         protected _isError: boolean;
+        protected _apiError: ApiError | null;
         protected get linkData(): LinkPreviewData;
         protected firstUpdated(_changedProperties: PropertyValues): void;
         private _fetchLinkPreviewData;
@@ -127,10 +153,11 @@ declare module "lib/util/test-helper" {
         FAVICON: string;
         FAVICON_SKELETON: string;
         FAVICON_FALLBACK: string;
-        THUMBNAIL: string;
-        THUMBNAIL_SKELETON: string;
-        THUMBNAIL_FALLBACK: string;
+        IMAGE: string;
+        IMAGE_SKELETON: string;
+        IMAGE_FALLBACK: string;
         AUTHOR: string;
+        DATE: string;
         ORIGIN: string;
         ANCHOR_ELEMENT: string;
         TITLE: string;
@@ -144,7 +171,6 @@ declare module "components/skeleton-shape.styles" {
 }
 declare module "components/skeleton-shape" {
     import { LitElement } from 'lit';
-    import { PreviewBoxLinkElement } from "link";
     /**
      * An example element.
      *
@@ -160,23 +186,93 @@ declare module "components/skeleton-shape" {
     }
     global {
         interface HTMLElementTagNameMap {
-            'previewbox-skeleton-shape': PreviewBoxLinkElement;
+            'previewbox-skeleton-shape': PreviewBoxSkeletonShapeElement;
         }
     }
+}
+declare module "components/limit-info.styles" {
+    export const styles: import("lit").CSSResult;
+}
+declare module "components/limit-info" {
+    import { LitElement } from 'lit';
+    export class PreviewBoxLimitInfoElement extends LitElement {
+        static styles: import("lit").CSSResult;
+        render(): import("lit-html").TemplateResult<1>;
+    }
+    global {
+        interface HTMLElementTagNameMap {
+            'previewbox-limit-info': PreviewBoxLimitInfoElement;
+        }
+    }
+}
+declare module "components/powered-by-previewbox.styles" {
+    export const styles: import("lit").CSSResult;
+}
+declare module "components/powered-by-previewbox" {
+    import { LitElement } from 'lit';
+    export class PoweredByPreviewBoxElement extends LitElement {
+        static styles: import("lit").CSSResult;
+        render(): import("lit-html").TemplateResult<1>;
+    }
+    global {
+        interface HTMLElementTagNameMap {
+            'powered-by-previewbox': PoweredByPreviewBoxElement;
+        }
+    }
+}
+declare module "components/favivon.styles" {
+    export const styles: import("lit").CSSResult;
 }
 declare module "templates/index" {
     export const fallbackImage: import("lit-html").TemplateResult<1>;
     export const fallbackFavicon: import("lit-html").TemplateResult<1>;
 }
+declare module "components/favicon" {
+    import { LitElement } from 'lit';
+    export class PreviewBoxFaviconElement extends LitElement {
+        static styles: import("lit").CSSResult;
+        faviconUrl: string | null;
+        isFaviconError: boolean;
+        render(): import("lit-html").TemplateResult<1>;
+    }
+    global {
+        interface HTMLElementTagNameMap {
+            'previewbox-favicon': PreviewBoxFaviconElement;
+        }
+    }
+}
+declare module "components/image.styles" {
+    export const styles: import("lit").CSSResult;
+}
+declare module "components/image" {
+    import { LitElement } from 'lit';
+    import "components/skeleton-shape";
+    export class PreviewBoxImageElement extends LitElement {
+        static styles: import("lit").CSSResult;
+        imageUrl: string | null;
+        imageAlt: string | null;
+        isLoading: boolean;
+        isImageError: boolean;
+        render(): import("lit-html").TemplateResult<1>;
+    }
+    global {
+        interface HTMLElementTagNameMap {
+            'previewbox-image': PreviewBoxImageElement;
+        }
+    }
+}
 declare module "link" {
     import { LinkPreviewDataDirective } from "directives/link-preview-data-directive";
     import "components/skeleton-shape";
+    import "components/limit-info";
+    import "components/powered-by-previewbox";
+    import "components/favicon";
+    import "components/image";
     /**
-     * An example element.
+     * Previewbox Link
      *
-     * @slot - This element has a slot
      * @csspart link - The a-element that contains the link
-     * @part link-card - The figure element that contains the link card
+     * @csspart container - The container element that contains the anchor element
      */
     export class PreviewBoxLinkElement extends LinkPreviewDataDirective {
         static styles: import("lit").CSSResult;
@@ -215,6 +311,8 @@ declare module "lib/adapters/meta-api/types" {
 }
 declare module "test/test-utils" {
     export const wait: (ms: number) => Promise<unknown>;
+    export const extractFaviconElement: (el: Element) => import("components/favicon").PreviewBoxFaviconElement | null | undefined;
+    export const extractImageElement: (el: Element) => import("components/image").PreviewBoxImageElement | null | undefined;
 }
 declare module "test/link_test" {
     import "link";

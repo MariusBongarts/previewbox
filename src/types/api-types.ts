@@ -1,15 +1,34 @@
-interface OpenGraphImage {
-  // Height and Width can be optional, see doc on
-  // https://github.com/jshemas/openGraphScraper/blob/master/lib/media.js
-  height?: string;
-  type: string;
-  url: string;
-  width?: string;
+export enum ApiError {
+  API_LIMIT_REACHED = 'API_LIMIT_REACHED',
+  UNKNOWN_ERROR = 'UNKNOWN_ERROR',
 }
 
-export interface LinkMetaData {
+type ApiSuccessResponse<T> = {
+  data: T;
+};
+type ApiErrorResponse = {
+  error: ApiError;
+};
+
+export type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
+
+export function isSuccessResponse<T>(
+  response: ApiResponse<T>
+): response is ApiSuccessResponse<T> {
+  return 'data' in response;
+}
+
+export interface OpenGraphImage {
+  height?: number;
+  type?: string;
+  url: string;
+  width?: number;
+  alt?: string;
+}
+
+export interface OpenGraphMetaData {
   title?: string;
-  image?: OpenGraphImage & {alt?: string};
+  image?: OpenGraphImage;
   description?: string;
   url?: string;
   type?: string;

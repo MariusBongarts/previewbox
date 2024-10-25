@@ -111,21 +111,21 @@ The `<previewbox-link>` component supports the following CSS custom properties f
 
 | Property Name                    | Description                            | Default Value              |
 | -------------------------------- | -------------------------------------- | -------------------------- |
-| `--background-color`             | Background color of the link card      | `#ffffff`                  |
-| `--dark-background-color`        | Background color in dark mode          | `#121212`                  |
-| `--text-color`                   | Text color of the link card            | `#000000`                  |
-| `--dark-text-color`              | Text color in dark mode                | `#e0e0e0`                  |
-| `--border-color`                 | Border color of the link card          | `rgb(124 139 154 / 25%)`   |
-| `--dark-border-color`            | Border color in dark mode              | `#8080803a`                |
-| `--metadata-color`               | Color of the metadata text             | `rgba(0, 0, 0, 0.7)`       |
-| `--dark-metadata-color`          | Metadata text color in dark mode       | `rgba(255, 255, 255, 0.7)` |
-| `--skeleton-color`               | Color of the loading skeleton          | `rgb(229, 231, 235)`       |
-| `--dark-skeleton-color`          | Skeleton color in dark mode            | `rgb(55, 65, 81)`          |
-| `--fallback-img-color`           | Color of the fallback image            | `hsl(220, 13%, 80%)`       |
-| `--dark-fallback-img-color`      | Fallback image color in dark mode      | `hsl(220, 13%, 40%)`       |
-| `--fallback-img-background`      | Background of the fallback image       | `rgb(229, 231, 235)`       |
-| `--dark-fallback-img-background` | Fallback image background in dark mode | `rgb(55, 65, 81)`          |
-| `--favicon-size`                 | Size of the favicon image              | `20px`                     |
+| `--pb-background-color`             | Background color of the link card      | `#ffffff`                  |
+| `--pb-dark-background-color`        | Background color in dark mode          | `#121212`                  |
+| `--pb-text-color`                   | Text color of the link card            | `#000000`                  |
+| `--pb-dark-text-color`              | Text color in dark mode                | `#e0e0e0`                  |
+| `--pb-border-color`                 | Border color of the link card          | `rgb(124 139 154 / 25%)`   |
+| `--pb-dark-border-color`            | Border color in dark mode              | `#8080803a`                |
+| `--pb-metadata-color`               | Color of the metadata text             | `rgba(0, 0, 0, 0.7)`       |
+| `--pb-dark-metadata-color`          | Metadata text color in dark mode       | `rgba(255, 255, 255, 0.7)` |
+| `--pb-skeleton-color`               | Color of the loading skeleton          | `rgb(229, 231, 235)`       |
+| `--pb-dark-skeleton-color`          | Skeleton color in dark mode            | `rgb(55, 65, 81)`          |
+| `--pb-fallback-img-color`           | Color of the fallback image            | `hsl(220, 13%, 80%)`       |
+| `--pb-dark-fallback-img-color`      | Fallback image color in dark mode      | `hsl(220, 13%, 40%)`       |
+| `--pb-fallback-img-background`      | Background of the fallback image       | `rgb(229, 231, 235)`       |
+| `--pb-dark-fallback-img-background` | Fallback image background in dark mode | `rgb(55, 65, 81)`          |
+| `--pb-favicon-size`                 | Size of the favicon image              | `20px`                     |
 
 These properties allow you to customize the appearance of the link preview to match your website's design.
 

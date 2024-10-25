@@ -4,6 +4,7 @@ import {LinkPreviewData} from '../lib/domain/types';
 import {fetchLinkPreviewData} from '../lib/adapters/meta-api';
 import {AnchorElementDataDirective} from './anchor-element-data.directive';
 import {urlToOrigin} from '../lib/util/url-helper';
+import {ApiError, isSuccessResponse} from '../types/api-types';
 
 /**
  * Directive that either fetches link preview data from an external URL or uses manually set properties.
@@ -60,6 +61,20 @@ export class LinkPreviewDataDirective extends AnchorElementDataDirective {
   @property()
   date: string | null = null;
 
+  /**
+   * If set to true, the Powered by Previewbox info will not be shown.
+   */
+  @property()
+  hidePoweredBy: string | undefined = undefined;
+
+  /**
+   * The URL of the API to fetch the link preview data from.
+   *
+   * Defaults to the Previewbox API.
+   */
+  @property()
+  apiUrl: string = 'https://previewbox.link/api/v1/meta'; // 'http://localhost:2200/api/v1/meta';
+
   @state()
   protected fetchedLinkPreviewData: LinkPreviewData | null = null;
 
@@ -68,6 +83,9 @@ export class LinkPreviewDataDirective extends AnchorElementDataDirective {
 
   @state()
   protected _isError = false;
+
+  @state()
+  protected _apiError: ApiError | null = null;
 
   protected get linkData(): LinkPreviewData {
     if (this.fetchedLinkPreviewData) {
@@ -99,15 +117,21 @@ export class LinkPreviewDataDirective extends AnchorElementDataDirective {
 
   private _fetchLinkPreviewData(): void {
     this._isLoading = true;
-    fetchLinkPreviewData(this.href)
-      .then((data) => {
-        this.fetchedLinkPreviewData = data;
+    fetchLinkPreviewData(this.href, {apiUrl: this.apiUrl})
+      .then((response) => {
+        if (isSuccessResponse(response)) {
+          this.fetchedLinkPreviewData = response.data;
+        } else {
+          this._isError = true;
+          this._apiError = response.error;
+        }
       })
       .catch((error) => {
         console.error(
           `Error fetching link preview data for ${this.href}: ${error}`
         );
         this._isError = true;
+        this._apiError = ApiError.UNKNOWN_ERROR;
       })
       .finally(() => {
         this._isLoading = false;

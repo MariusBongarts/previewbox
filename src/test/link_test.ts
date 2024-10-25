@@ -8,7 +8,11 @@ import {fixture, assert, expect} from '@open-wc/testing';
 import {html} from 'lit/static-html.js';
 import '../link.js';
 import {PreviewBoxLinkElement} from '../link.js';
-import {wait} from './test-utils.js';
+import {
+  extractFaviconElement,
+  extractImageElement,
+  wait,
+} from './test-utils.js';
 import {byTestId, TEST_IDS} from '../lib/util/test-helper.js';
 import {urlToOrigin} from '../lib/util/url-helper.js';
 
@@ -38,12 +42,11 @@ suite('previewbox-link', () => {
     const link = el.shadowRoot!.querySelector(
       byTestId(TEST_IDS.ANCHOR_ELEMENT)
     )! as HTMLAnchorElement;
-    const img = el.shadowRoot!.querySelector(
-      byTestId(TEST_IDS.THUMBNAIL)
+    const img = extractImageElement(el)!.shadowRoot!.querySelector(
+      byTestId(TEST_IDS.IMAGE)
     )! as HTMLImageElement;
-    const favicon = el.shadowRoot!.querySelector(
-      byTestId(TEST_IDS.FAVICON)
-    )! as HTMLImageElement;
+    const favicon =
+      extractFaviconElement(el)!.shadowRoot?.querySelector('img')!;
     assert.equal(link.href, 'https://web-highlights.com/');
     assert.equal(img.src, 'https://web-highlights.com/images/wh-thumbnail.png');
     assert.equal(favicon.src, 'https://web-highlights.com/favicon.ico');
@@ -76,12 +79,11 @@ suite('previewbox-link', () => {
     const linkElement = el.shadowRoot!.querySelector(
       byTestId(TEST_IDS.ANCHOR_ELEMENT)
     )! as HTMLAnchorElement;
-    const img = el.shadowRoot!.querySelector(
-      byTestId(TEST_IDS.THUMBNAIL)
+    const img = extractImageElement(el)!.shadowRoot!.querySelector(
+      byTestId(TEST_IDS.IMAGE)
     )! as HTMLImageElement;
-    const favicon = el.shadowRoot!.querySelector(
-      byTestId(TEST_IDS.FAVICON)
-    )! as HTMLImageElement;
+    const favicon =
+      extractFaviconElement(el)!.shadowRoot?.querySelector('img')!;
     const titleElement = el.shadowRoot!.querySelector(
       byTestId(TEST_IDS.TITLE)
     )! as HTMLDivElement;
@@ -99,7 +101,7 @@ suite('previewbox-link', () => {
     assert.equal(linkElement.rel, 'nofollow');
     assert.equal(img.src, imageUrl);
     assert.equal(favicon.src, faviconUrl);
-    assert.equal(favicon.alt, `Favicon of ${urlToOrigin(url)}`);
+    assert.equal(favicon.alt, `Favicon`);
     assert.include(titleElement.textContent, title);
     assert.include(descriptionElement.textContent, description);
     assert.equal(authorElement.textContent, author);
@@ -132,8 +134,11 @@ suite('previewbox-link', () => {
       .exist;
     expect(el.shadowRoot!.querySelector(byTestId(TEST_IDS.FAVICON_SKELETON))!)
       .to.exist;
-    expect(el.shadowRoot!.querySelector(byTestId(TEST_IDS.THUMBNAIL_SKELETON))!)
-      .to.exist;
+    expect(
+      extractImageElement(el)!.shadowRoot!.querySelector(
+        byTestId(TEST_IDS.IMAGE_SKELETON)
+      )!
+    ).to.exist;
   });
 
   test('renders a fallback image and favicon if the image and favicon URLs are not correct', async () => {
@@ -166,9 +171,15 @@ suite('previewbox-link', () => {
       byTestId(TEST_IDS.TITLE)
     )! as HTMLDivElement;
     assert.include(titleElement.textContent, title);
-    expect(el.shadowRoot!.querySelector(byTestId(TEST_IDS.THUMBNAIL_FALLBACK))!)
-      .to.exist;
-    expect(el.shadowRoot!.querySelector(byTestId(TEST_IDS.FAVICON_FALLBACK))!)
-      .to.exist;
+    expect(
+      extractImageElement(el)!.shadowRoot!.querySelector(
+        byTestId(TEST_IDS.IMAGE_FALLBACK)
+      )!
+    ).to.exist;
+    expect(
+      extractFaviconElement(el)?.shadowRoot!.querySelector(
+        byTestId(TEST_IDS.FAVICON_FALLBACK)
+      )!
+    ).to.exist;
   });
 });

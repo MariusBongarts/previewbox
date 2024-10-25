@@ -1,9 +1,9 @@
-import {LinkMetaData} from '../../../types/api-types';
+import {OpenGraphMetaData} from '../../../types/api-types';
 import {LinkPreviewData} from '../../domain/types';
 import {urlToOrigin} from '../../util/url-helper';
 
 export const mapLinkMetaDataToLinkPreviewData = (
-  data: LinkMetaData
+  data: OpenGraphMetaData
 ): LinkPreviewData => {
   return {
     title: data.title ?? null,

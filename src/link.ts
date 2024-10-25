@@ -4,14 +4,17 @@ import {styles} from './link.styles';
 import {LinkPreviewDataDirective} from './directives/link-preview-data-directive';
 import {TEST_IDS} from './lib/util/test-helper';
 import './components/skeleton-shape';
-import {fallbackFavicon, fallbackImage} from './templates';
+import './components/limit-info';
+import './components/powered-by-previewbox';
+import './components/favicon';
+import './components/image';
+import {ApiError} from './types/api-types';
 
 /**
- * An example element.
+ * Previewbox Link
  *
- * @slot - This element has a slot
  * @csspart link - The a-element that contains the link
- * @part link-card - The figure element that contains the link card
+ * @csspart container - The container element that contains the anchor element
  */
 @customElement('previewbox-link')
 export class PreviewBoxLinkElement extends LinkPreviewDataDirective {
@@ -25,13 +28,16 @@ export class PreviewBoxLinkElement extends LinkPreviewDataDirective {
 
   override render() {
     return html`
-      <figure part="link-card" class="previewbox-link-card">
+      <figure part="container" class="container">
+        ${this._apiError === ApiError.API_LIMIT_REACHED
+          ? html`<previewbox-limit-info></previewbox-limit-info>`
+          : ''}
         <a
           href=${this.linkData.url || this.href}
           target=${this.target}
           part="link"
           rel=${this.rel}
-          class="link"
+          class="previewbox-link"
           data-testid="${TEST_IDS.ANCHOR_ELEMENT}"
         >
           <div class="previewbox-content">
@@ -88,17 +94,9 @@ export class PreviewBoxLinkElement extends LinkPreviewDataDirective {
                     </div>
                   `
                 : html`
-                    ${this.linkData?.favicon && !this.isFaviconError
-                      ? html`
-                          <img
-                            data-testid="${TEST_IDS.FAVICON}"
-                            class="previewbox-favicon"
-                            src=${this.linkData.favicon ?? ''}
-                            alt="Favicon of ${this.linkData.origin}"
-                            @error=${() => (this.isFaviconError = true)}
-                          />
-                        `
-                      : fallbackFavicon}
+                    <previewbox-favicon
+                      .faviconUrl=${this.linkData.favicon}
+                    ></previewbox-favicon>
                     <span data-testid="${TEST_IDS.ORIGIN}"
                       >${this.linkData.origin}</span
                     >${this.linkData.author
@@ -110,35 +108,16 @@ export class PreviewBoxLinkElement extends LinkPreviewDataDirective {
             </div>
           </div>
           <div class="previewbox-thumbnail">
-            ${this._isLoading
-              ? html`<previewbox-skeleton-shape
-                  height="100%"
-                  data-testid="${TEST_IDS.THUMBNAIL_SKELETON}"
-                >
-                  ${fallbackImage}
-                </previewbox-skeleton-shape>`
-              : html`
-                  ${this.linkData?.imageUrl && !this.isImgError
-                    ? html`
-                        <img
-                          data-testid="${TEST_IDS.THUMBNAIL}"
-                          src=${this.linkData?.imageUrl ?? ''}
-                          alt=${this.linkData?.imageAlt ??
-                          'Thumbnail image of ' + this.url}
-                          @error=${() => (this.isImgError = true)}
-                        />
-                      `
-                    : html`
-                        <figure
-                          class="fallback-img"
-                          data-testid="${TEST_IDS.THUMBNAIL_FALLBACK}"
-                        >
-                          ${fallbackImage}
-                        </figure>
-                      `}
-                `}
+            <previewbox-image
+              .isLoading=${this._isLoading}
+              .imageUrl=${this.linkData?.imageUrl}
+              .imageAlt=${this.linkData?.imageAlt}
+            ></previewbox-image>
           </div>
         </a>
+        ${typeof this.hidePoweredBy !== 'undefined'
+          ? ''
+          : html`<powered-by-previewbox></powered-by-previewbox>`}
       </figure>
     `;
   }

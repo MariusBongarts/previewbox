@@ -8,7 +8,7 @@ export const styles = css`
   }
 
   .skeleton-shape {
-    background-color: var(--skeleton-color);
+    background-color: var(--pb-skeleton-color);
     animation: pulse 1.5s infinite ease-in-out;
     display: flex;
     align-items: center;
@@ -27,7 +27,7 @@ export const styles = css`
 
   @media (prefers-color-scheme: dark) {
     :host {
-      --skeleton-color: var(--dark-skeleton-color);
+      --skeleton-color: var(--pb-dark-skeleton-color);
     }
   }
 `;
