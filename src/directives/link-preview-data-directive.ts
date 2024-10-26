@@ -5,7 +5,7 @@ import {AnchorElementDataDirective} from './anchor-element-data.directive';
 import {urlToOrigin} from '../lib/util/url-helper';
 import {
   ApiError,
-  fetchLinkPreviewData,
+  apiFetcher,
   isSuccessResponse,
 } from '../lib/services/api-fetcher';
 
@@ -76,9 +76,7 @@ export class LinkPreviewDataDirective extends AnchorElementDataDirective {
    * Defaults to the Previewbox API.
    */
   @property()
-  apiUrl: string = window.location.href.startsWith(
-    'http://localhost:8000/demo'
-  )
+  apiUrl: string = window.location.href.startsWith('http://localhost:8000/demo')
     ? 'http://localhost:4444/api/v1/meta'
     : 'https://previewbox.link/api/v1/meta';
 
@@ -124,7 +122,8 @@ export class LinkPreviewDataDirective extends AnchorElementDataDirective {
 
   private _fetchLinkPreviewData(): void {
     this._isLoading = true;
-    fetchLinkPreviewData(this.href, {apiUrl: this.apiUrl})
+    apiFetcher
+      .fetchLinkPreviewData(this.href, {apiUrl: this.apiUrl})
       .then((response) => {
         if (isSuccessResponse(response)) {
           this.fetchedLinkPreviewData = response.data;

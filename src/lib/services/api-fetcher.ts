@@ -1,5 +1,3 @@
-import {mapLinkMetaDataToLinkPreviewData} from '../adapters/meta-api/mapper/open-graph-meta-data-mapper';
-import {OpenGraphMetaData} from '../adapters/meta-api/model/open-graph-meta-data';
 import {LinkPreviewData} from '../domain/models/link-preview-data';
 
 export enum ApiError {
@@ -22,32 +20,36 @@ export function isSuccessResponse<T>(
   return 'data' in response;
 }
 
-export const fetchLinkPreviewData = async (
-  url: string,
-  options: {
-    apiUrl: string;
-  }
-): Promise<ApiResponse<LinkPreviewData>> => {
-  try {
-    const searchParams = new URLSearchParams();
-    searchParams.set('url', url);
-    const response = await fetch(
-      `${options.apiUrl}?${searchParams.toString()}`,
-      {
-        headers: {
-          origin: window.location.origin,
-        },
+class ApiFetcher {
+  public async fetchLinkPreviewData(
+    url: string,
+    options: {
+      apiUrl: string;
+    }
+  ): Promise<ApiResponse<LinkPreviewData>> {
+    try {
+      const searchParams = new URLSearchParams();
+      searchParams.set('url', url);
+      const response = await fetch(
+        `${options.apiUrl}?${searchParams.toString()}`,
+        {
+          headers: {
+            origin: window.location.origin,
+          },
+        }
+      );
+      if (!response.ok) {
+        if (response.status === 429) {
+          return {error: ApiError.API_LIMIT_REACHED};
+        }
+        return {error: ApiError.UNKNOWN_ERROR};
       }
-    );
-    if (!response.ok) {
-      if (response.status === 429) {
-        return {error: ApiError.API_LIMIT_REACHED};
-      }
+      const linkPreviewData = (await response.json()) as LinkPreviewData;
+      return {data: linkPreviewData};
+    } catch (error) {
       return {error: ApiError.UNKNOWN_ERROR};
     }
-    const openGraphMetaData = (await response.json()) as OpenGraphMetaData;
-    return {data: mapLinkMetaDataToLinkPreviewData(openGraphMetaData)};
-  } catch (error) {
-    return {error: ApiError.UNKNOWN_ERROR};
   }
-};
+}
+
+export const apiFetcher = new ApiFetcher();

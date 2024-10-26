@@ -1,3 +1,4 @@
+// Align with /server/src/lib/domain/models/link-preview-data.ts
 export interface LinkPreviewData {
   title: string | null;
   imageUrl: string | null;

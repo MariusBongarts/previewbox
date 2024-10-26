@@ -1,5 +1,4 @@
 import { LinkPreviewData } from "../../../domain/models/link-preview-data";
-import { urlToOrigin } from "../../../util/url-helper";
 import { OpenGraphMetaData } from "../model/open-graph-meta-data";
 
 
@@ -15,7 +14,7 @@ export const mapLinkMetaDataToLinkPreviewData = (
       author: data.author ?? null,
       favicon: data.favicon ?? null,
       date: data.date ?? null,
-      origin: urlToOrigin(data.url) ?? null,
+      origin: data.origin ?? null,
     };
   };
   

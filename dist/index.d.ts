@@ -40,31 +40,6 @@ declare module "lib/util/url-helper" {
     export function urlWithoutSchema(url?: string | null): string;
     export function urlToOrigin(url?: string | null): string;
 }
-declare module "lib/adapters/meta-api/model/open-graph-meta-data" {
-    export interface OpenGraphImage {
-        height?: number;
-        type?: string;
-        url: string;
-        width?: number;
-        alt?: string;
-    }
-    export interface OpenGraphMetaData {
-        url: string | null;
-        title?: string | null;
-        description?: string | null;
-        image?: OpenGraphImage;
-        author?: string | null;
-        favicon?: string | null;
-        date?: string | null;
-        origin?: string | null;
-        type?: string | null;
-    }
-}
-declare module "lib/adapters/meta-api/mapper/open-graph-meta-data-mapper" {
-    import { LinkPreviewData } from "lib/domain/models/link-preview-data";
-    import { OpenGraphMetaData } from "lib/adapters/meta-api/model/open-graph-meta-data";
-    export const mapLinkMetaDataToLinkPreviewData: (data: OpenGraphMetaData) => LinkPreviewData;
-}
 declare module "lib/services/api-fetcher" {
     import { LinkPreviewData } from "lib/domain/models/link-preview-data";
     export enum ApiError {
@@ -79,9 +54,12 @@ declare module "lib/services/api-fetcher" {
     };
     export type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
     export function isSuccessResponse<T>(response: ApiResponse<T>): response is ApiSuccessResponse<T>;
-    export const fetchLinkPreviewData: (url: string, options: {
-        apiUrl: string;
-    }) => Promise<ApiResponse<LinkPreviewData>>;
+    class ApiFetcher {
+        fetchLinkPreviewData(url: string, options: {
+            apiUrl: string;
+        }): Promise<ApiResponse<LinkPreviewData>>;
+    }
+    export const apiFetcher: ApiFetcher;
 }
 declare module "directives/link-preview-data-directive" {
     import { PropertyValues } from 'lit';
@@ -288,6 +266,31 @@ declare module "link" {
 }
 declare module "index" {
     export * from "link";
+}
+declare module "lib/adapters/meta-api/model/open-graph-meta-data" {
+    export interface OpenGraphImage {
+        height?: number;
+        type?: string;
+        url: string;
+        width?: number;
+        alt?: string;
+    }
+    export interface OpenGraphMetaData {
+        url: string | null;
+        title?: string | null;
+        description?: string | null;
+        image?: OpenGraphImage;
+        author?: string | null;
+        favicon?: string | null;
+        date?: string | null;
+        origin?: string | null;
+        type?: string | null;
+    }
+}
+declare module "lib/adapters/meta-api/mapper/open-graph-meta-data-mapper" {
+    import { LinkPreviewData } from "lib/domain/models/link-preview-data";
+    import { OpenGraphMetaData } from "lib/adapters/meta-api/model/open-graph-meta-data";
+    export const mapLinkMetaDataToLinkPreviewData: (data: OpenGraphMetaData) => LinkPreviewData;
 }
 declare module "test/test-utils" {
     export const wait: (ms: number) => Promise<unknown>;

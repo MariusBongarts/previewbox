@@ -6,6 +6,7 @@ export interface OpenGraphImage {
   alt?: string;
 }
 
+// Align with /server/src/lib/domain/models/link-preview-data.ts
 export interface OpenGraphMetaData {
   url: string | null;
   title?: string | null;

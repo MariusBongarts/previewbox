@@ -786,49 +786,37 @@
     }
   }
 
-  // src/lib/adapters/meta-api/mapper/open-graph-meta-data-mapper.ts
-  var mapLinkMetaDataToLinkPreviewData = (data) => {
-    return {
-      title: data.title ?? null,
-      imageUrl: data.image?.url ?? null,
-      imageAlt: data.image?.alt ?? null,
-      description: data.description ?? null,
-      url: data.url ?? null,
-      author: data.author ?? null,
-      favicon: data.favicon ?? null,
-      date: data.date ?? null,
-      origin: urlToOrigin(data.url) ?? null
-    };
-  };
-
   // src/lib/services/api-fetcher.ts
   function isSuccessResponse(response) {
     return "data" in response;
   }
-  var fetchLinkPreviewData = async (url, options) => {
-    try {
-      const searchParams = new URLSearchParams();
-      searchParams.set("url", url);
-      const response = await fetch(
-        `${options.apiUrl}?${searchParams.toString()}`,
-        {
-          headers: {
-            origin: window.location.origin
+  var ApiFetcher = class {
+    async fetchLinkPreviewData(url, options) {
+      try {
+        const searchParams = new URLSearchParams();
+        searchParams.set("url", url);
+        const response = await fetch(
+          `${options.apiUrl}?${searchParams.toString()}`,
+          {
+            headers: {
+              origin: window.location.origin
+            }
           }
+        );
+        if (!response.ok) {
+          if (response.status === 429) {
+            return { error: "API_LIMIT_REACHED" /* API_LIMIT_REACHED */ };
+          }
+          return { error: "UNKNOWN_ERROR" /* UNKNOWN_ERROR */ };
         }
-      );
-      if (!response.ok) {
-        if (response.status === 429) {
-          return { error: "API_LIMIT_REACHED" /* API_LIMIT_REACHED */ };
-        }
+        const linkPreviewData = await response.json();
+        return { data: linkPreviewData };
+      } catch (error) {
         return { error: "UNKNOWN_ERROR" /* UNKNOWN_ERROR */ };
       }
-      const openGraphMetaData = await response.json();
-      return { data: mapLinkMetaDataToLinkPreviewData(openGraphMetaData) };
-    } catch (error) {
-      return { error: "UNKNOWN_ERROR" /* UNKNOWN_ERROR */ };
     }
   };
+  var apiFetcher = new ApiFetcher();
 
   // src/directives/link-preview-data-directive.ts
   var LinkPreviewDataDirective = class extends AnchorElementDataDirective {
@@ -843,9 +831,7 @@
       this.faviconUrl = null;
       this.date = null;
       this.hidePoweredBy = void 0;
-      this.apiUrl = window.location.href.startsWith(
-        "http://localhost:8000/demo"
-      ) ? "http://localhost:4444/api/v1/meta" : "https://previewbox.link/api/v1/meta";
+      this.apiUrl = window.location.href.startsWith("http://localhost:8000/demo") ? "http://localhost:4444/api/v1/meta" : "https://previewbox.link/api/v1/meta";
       this.fetchedLinkPreviewData = null;
       this._isLoading = false;
       this._isError = false;
@@ -879,7 +865,7 @@
     }
     _fetchLinkPreviewData() {
       this._isLoading = true;
-      fetchLinkPreviewData(this.href, { apiUrl: this.apiUrl }).then((response) => {
+      apiFetcher.fetchLinkPreviewData(this.href, { apiUrl: this.apiUrl }).then((response) => {
         if (isSuccessResponse(response)) {
           this.fetchedLinkPreviewData = response.data;
         } else {
