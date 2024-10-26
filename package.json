@@ -1,6 +1,6 @@
 {
   "name": "@mariusbongarts/previewbox",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "A comprehensive web component suite for rendering link previews, complete with thumbnails, titles, authors, and Open Graph metadata integration.",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -12,6 +12,7 @@
     "type": "git",
     "url": "https://github.com/MariusBongarts/previewbox"
   },
+  "homepage": "https://previewbox.link",
   "scripts": {
     "dev": "concurrently \"yarn start:server\" \"yarn build:watch\" \"yarn serve\"",
     "start:server": "yarn --cwd server start",
