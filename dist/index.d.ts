@@ -149,13 +149,6 @@ declare module "components/skeleton-shape.styles" {
 }
 declare module "components/skeleton-shape" {
     import { LitElement } from 'lit';
-    /**
-     * An example element.
-     *
-     * @slot - This element has a slot
-     * @csspart link - The a-element that contains the link
-     * @part link-card - The figure element that contains the link card
-     */
     export class PreviewBoxSkeletonShapeElement extends LitElement {
         static styles: import("lit").CSSResult;
         width: number | string;
@@ -247,7 +240,7 @@ declare module "link" {
     import "components/favicon";
     import "components/image";
     /**
-     * Previewbox Link
+     * Previewbox Link | <previewbox-link>
      *
      * @csspart link - The a-element that contains the link
      * @csspart container - The container element that contains the anchor element

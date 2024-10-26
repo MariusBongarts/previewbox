@@ -2,13 +2,6 @@ import {html, LitElement} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import {styles} from './skeleton-shape.styles';
 
-/**
- * An example element.
- *
- * @slot - This element has a slot
- * @csspart link - The a-element that contains the link
- * @part link-card - The figure element that contains the link card
- */
 @customElement('previewbox-skeleton-shape')
 export class PreviewBoxSkeletonShapeElement extends LitElement {
   static override styles = styles;

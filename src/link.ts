@@ -11,7 +11,7 @@ import './components/image';
 import { ApiError } from './lib/services/api-fetcher';
 
 /**
- * Previewbox Link
+ * Previewbox Link | <previewbox-link>
  *
  * @csspart link - The a-element that contains the link
  * @csspart container - The container element that contains the anchor element

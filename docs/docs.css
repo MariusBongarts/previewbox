@@ -35,7 +35,7 @@ header {
   justify-content: center;
   height: 360px;
   margin: 0;
-  background: linear-gradient(0deg, rgba(9,9,121,1) 0%, rgba(0,212,255,1) 100%);
+  background: linear-gradient(0deg, rgb(0, 0, 0) 0%, rgb(75, 75, 75) 100%);
   color: white;
 }
 
