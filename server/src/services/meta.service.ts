@@ -2,6 +2,7 @@ import NodeCache from 'node-cache';
 import ogs from 'open-graph-scraper';
 import {mapOpenGraphResultToMetaData} from '../lib/adapters/open-graph-scraper/mapper/open-graph-adapter';
 import {LinkPreviewData} from '../lib/domain/models/link-preview-data';
+import { logger } from './logger.service';
 
 export class MetaService {
   private cache = new NodeCache({stdTTL: 60 * 60});
@@ -9,7 +10,7 @@ export class MetaService {
   private readFromCache(url: string): LinkPreviewData | undefined {
     const resultFromCache = this.cache.get<LinkPreviewData>(url);
     if (resultFromCache) {
-      console.log(`[CACHE]: Read data for url: ${url}`);
+      logger.log(`[CACHE] - Read data for url: ${url}`);
     }
     return resultFromCache;
   }
@@ -41,7 +42,7 @@ export class MetaService {
         result,
         url
       );
-      console.log(`Fetched data for url: ${url}`);
+      logger.log(`Fetched data for url: ${url}`);
       this.cache.set(url, metaData);
       return metaData;
     } catch (error) {
