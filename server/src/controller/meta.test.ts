@@ -50,4 +50,14 @@ describe('#getMetaData', () => {
       origin: 'https://previewbox.link/',
     });
   });
+  const invalidUrl = 'invalid-url';
+  it(`should return 400 for invalid url ${invalidUrl}`, async () => {
+    const req: Partial<Request> = {query: {url: invalidUrl}};
+    const res: Partial<Response> = {
+      json: jest.fn(),
+      status: jest.fn(),
+    };
+    await getMetaData(req as any, res as any);
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
 });

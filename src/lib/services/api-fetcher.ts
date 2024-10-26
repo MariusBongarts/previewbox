@@ -29,8 +29,10 @@ export const fetchLinkPreviewData = async (
   }
 ): Promise<ApiResponse<LinkPreviewData>> => {
   try {
+    const searchParams = new URLSearchParams();
+    searchParams.set('url', url);
     const response = await fetch(
-      `${options.apiUrl}?url=${encodeURIComponent(url)}`,
+      `${options.apiUrl}?${searchParams.toString()}`,
       {
         headers: {
           origin: window.location.origin,

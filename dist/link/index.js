@@ -807,8 +807,10 @@
   }
   var fetchLinkPreviewData = async (url, options) => {
     try {
+      const searchParams = new URLSearchParams();
+      searchParams.set("url", url);
       const response = await fetch(
-        `${options.apiUrl}?url=${encodeURIComponent(url)}`,
+        `${options.apiUrl}?${searchParams.toString()}`,
         {
           headers: {
             origin: window.location.origin
@@ -841,7 +843,9 @@
       this.faviconUrl = null;
       this.date = null;
       this.hidePoweredBy = void 0;
-      this.apiUrl = window.location.origin.startsWith("http://localhost") ? "http://localhost:4444/v1/meta" : "https://previewbox.link/api/v1/meta";
+      this.apiUrl = window.location.href.startsWith(
+        "http://localhost:8000/demo"
+      ) ? "http://localhost:4444/api/v1/meta" : "https://previewbox.link/api/v1/meta";
       this.fetchedLinkPreviewData = null;
       this._isLoading = false;
       this._isError = false;

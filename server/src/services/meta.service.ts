@@ -9,15 +9,23 @@ export class MetaService {
   private readFromCache(url: string): LinkPreviewData | undefined {
     const resultFromCache = this.cache.get<LinkPreviewData>(url);
     if (resultFromCache) {
-      console.log(
-        `[CACHE]: Read data for url: ${url}`
-      );
+      console.log(`[CACHE]: Read data for url: ${url}`);
     }
     return resultFromCache;
   }
 
-  public async getOpenGraphData(url: string): Promise<LinkPreviewData> {
+  private invalidateCache(url: string): void {
+    this.cache.del(url);
+  }
+
+  public async getOpenGraphData(
+    url: string,
+    {invalidateCache = false} = {}
+  ): Promise<LinkPreviewData> {
     try {
+      if (invalidateCache) {
+        this.invalidateCache(url);
+      }
       const resultFromCache = this.readFromCache(url);
       if (resultFromCache) {
         return resultFromCache;

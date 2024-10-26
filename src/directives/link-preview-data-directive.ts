@@ -76,10 +76,10 @@ export class LinkPreviewDataDirective extends AnchorElementDataDirective {
    * Defaults to the Previewbox API.
    */
   @property()
-  apiUrl: string = window.location.origin.startsWith(
-    'http://localhost:8080/demo'
+  apiUrl: string = window.location.href.startsWith(
+    'http://localhost:8000/demo'
   )
-    ? 'http://localhost:4444/v1/meta'
+    ? 'http://localhost:4444/api/v1/meta'
     : 'https://previewbox.link/api/v1/meta';
 
   @state()
