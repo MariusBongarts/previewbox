@@ -4,6 +4,8 @@
 
 PreviewBox is a collection of components that fetch and display link preview data from a specified URL. It's a straightforward way to add a link thumbnail to any website. Built with Web Components using LitElement and TypeScript, it works seamlessly in any framework.
 
+Find our official documentation at [previewbox.link/docs](https://previewbox.link/docs).
+
 ## Components
 
 ### `<previewbox-link>`
