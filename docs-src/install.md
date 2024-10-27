@@ -1,6 +1,6 @@
 ---
 layout: page.11ty.cjs
-title: <previewbox-link> ⌲ Install
+title: Previewbox ⌲ Install
 ---
 
 # Install

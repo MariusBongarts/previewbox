@@ -1,6 +1,6 @@
 ---
 layout: page.11ty.cjs
-title: <previewbox-link> ⌲ Home
+title: Previewbox ⌲ Home
 ---
 
 <script src="https://cdn.jsdelivr.net/npm/@mariusbongarts/previewbox/dist/link/index.min.js"></script>
