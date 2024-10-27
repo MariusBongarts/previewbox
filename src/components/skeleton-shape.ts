@@ -1,8 +1,8 @@
 import {html, LitElement} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import {property} from 'lit/decorators.js';
 import {styles} from './skeleton-shape.styles';
+import { definePreviewBoxCustomElement } from '../lib/util/custom-elements-helper';
 
-@customElement('previewbox-skeleton-shape')
 export class PreviewBoxSkeletonShapeElement extends LitElement {
   static override styles = styles;
 
@@ -24,8 +24,13 @@ export class PreviewBoxSkeletonShapeElement extends LitElement {
   }
 }
 
+const customElementName = 'previewbox-skeleton-shape' as const;
+
 declare global {
   interface HTMLElementTagNameMap {
-    'previewbox-skeleton-shape': PreviewBoxSkeletonShapeElement;
+    [customElementName]: PreviewBoxSkeletonShapeElement;
   }
 }
+
+definePreviewBoxCustomElement(customElementName, PreviewBoxSkeletonShapeElement);
+

@@ -167,6 +167,10 @@ declare module "lib/util/test-helper" {
 declare module "components/skeleton-shape.styles" {
     export const styles: import("lit").CSSResult;
 }
+declare module "lib/util/custom-elements-helper" {
+    export const customElementIsRegistered: (name: string) => boolean;
+    export const definePreviewBoxCustomElement: (name: string, element: CustomElementConstructor) => void;
+}
 declare module "components/skeleton-shape" {
     import { LitElement } from 'lit';
     export class PreviewBoxSkeletonShapeElement extends LitElement {
@@ -175,9 +179,10 @@ declare module "components/skeleton-shape" {
         height: number | string;
         render(): import("lit-html").TemplateResult<1>;
     }
+    const customElementName: "previewbox-skeleton-shape";
     global {
         interface HTMLElementTagNameMap {
-            'previewbox-skeleton-shape': PreviewBoxSkeletonShapeElement;
+            [customElementName]: PreviewBoxSkeletonShapeElement;
         }
     }
 }
@@ -190,9 +195,10 @@ declare module "components/limit-info" {
         static styles: import("lit").CSSResult;
         render(): import("lit-html").TemplateResult<1>;
     }
+    const customElementName: "previewbox-limit-info";
     global {
         interface HTMLElementTagNameMap {
-            'previewbox-limit-info': PreviewBoxLimitInfoElement;
+            [customElementName]: PreviewBoxLimitInfoElement;
         }
     }
 }
@@ -205,9 +211,10 @@ declare module "components/powered-by-previewbox" {
         static styles: import("lit").CSSResult;
         render(): import("lit-html").TemplateResult<1>;
     }
+    const customElementName: "powered-by-previewbox";
     global {
         interface HTMLElementTagNameMap {
-            'powered-by-previewbox': PoweredByPreviewBoxElement;
+            [customElementName]: PoweredByPreviewBoxElement;
         }
     }
 }
@@ -226,9 +233,10 @@ declare module "components/favicon" {
         isFaviconError: boolean;
         render(): import("lit-html").TemplateResult<1>;
     }
+    const customElementName: "previewbox-favicon";
     global {
         interface HTMLElementTagNameMap {
-            'previewbox-favicon': PreviewBoxFaviconElement;
+            [customElementName]: PreviewBoxFaviconElement;
         }
     }
 }
@@ -246,9 +254,10 @@ declare module "components/image" {
         isImageError: boolean;
         render(): import("lit-html").TemplateResult<1>;
     }
+    const customElementName: "previewbox-image";
     global {
         interface HTMLElementTagNameMap {
-            'previewbox-image': PreviewBoxImageElement;
+            [customElementName]: PreviewBoxImageElement;
         }
     }
 }
@@ -304,6 +313,7 @@ declare module "link" {
 }
 declare module "index" {
     export * from "link";
+    export * from "article";
 }
 declare module "lib/adapters/meta-api/model/open-graph-meta-data" {
     export interface OpenGraphImage {

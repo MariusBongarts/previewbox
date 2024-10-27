@@ -1,11 +1,11 @@
 import {html, LitElement} from 'lit';
-import {customElement, property, state} from 'lit/decorators.js';
+import {property, state} from 'lit/decorators.js';
 import {styles} from './image.styles';
 import {TEST_IDS} from '../lib/util/test-helper';
 import {fallbackImage} from '../templates';
 import './skeleton-shape';
+import {customElementIsRegistered, definePreviewBoxCustomElement} from '../lib/util/custom-elements-helper';
 
-@customElement('previewbox-image')
 export class PreviewBoxImageElement extends LitElement {
   static override styles = styles;
 
@@ -54,8 +54,12 @@ export class PreviewBoxImageElement extends LitElement {
   }
 }
 
+const customElementName = 'previewbox-image' as const;
+
 declare global {
   interface HTMLElementTagNameMap {
-    'previewbox-image': PreviewBoxImageElement;
+    [customElementName]: PreviewBoxImageElement;
   }
 }
+
+definePreviewBoxCustomElement(customElementName, PreviewBoxImageElement);

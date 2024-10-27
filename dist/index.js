@@ -1076,12 +1076,26 @@
   }
 `;
 
+  // src/lib/util/custom-elements-helper.ts
+  var customElementIsRegistered = (name) => {
+    const isRegistered = !!customElements.get(name) || document.createElement(name).constructor !== HTMLElement;
+    return isRegistered;
+  };
+  var definePreviewBoxCustomElement = (name, element) => {
+    if (!customElementIsRegistered(name)) {
+      customElements.define(name, element);
+    }
+  };
+
   // src/components/skeleton-shape.ts
   var PreviewBoxSkeletonShapeElement = class extends h3 {
     constructor() {
       super(...arguments);
       this.width = "100%";
       this.height = "16px";
+    }
+    static {
+      this.styles = styles2;
     }
     render() {
       return ke`<div
@@ -1094,16 +1108,14 @@
     </div>`;
     }
   };
-  PreviewBoxSkeletonShapeElement.styles = styles2;
   __decorateClass([
     n4()
   ], PreviewBoxSkeletonShapeElement.prototype, "width", 2);
   __decorateClass([
     n4()
   ], PreviewBoxSkeletonShapeElement.prototype, "height", 2);
-  PreviewBoxSkeletonShapeElement = __decorateClass([
-    t2("previewbox-skeleton-shape")
-  ], PreviewBoxSkeletonShapeElement);
+  var customElementName = "previewbox-skeleton-shape";
+  definePreviewBoxCustomElement(customElementName, PreviewBoxSkeletonShapeElement);
 
   // src/components/limit-info.styles.ts
   var styles3 = i`
@@ -1143,6 +1155,9 @@
 
   // src/components/limit-info.ts
   var PreviewBoxLimitInfoElement = class extends h3 {
+    static {
+      this.styles = styles3;
+    }
     render() {
       const domain = window.location.origin;
       return ke`<div class="limit-info-container">
@@ -1158,10 +1173,8 @@
     </div>`;
     }
   };
-  PreviewBoxLimitInfoElement.styles = styles3;
-  PreviewBoxLimitInfoElement = __decorateClass([
-    t2("previewbox-limit-info")
-  ], PreviewBoxLimitInfoElement);
+  var customElementName2 = "previewbox-limit-info";
+  definePreviewBoxCustomElement(customElementName2, PreviewBoxLimitInfoElement);
 
   // src/components/powered-by-previewbox.styles.ts
   var styles4 = i`
@@ -1187,6 +1200,9 @@
 
   // src/components/powered-by-previewbox.ts
   var PoweredByPreviewBoxElement = class extends h3 {
+    static {
+      this.styles = styles4;
+    }
     render() {
       return ke`<span class="powered-by">
       Powered by
@@ -1194,10 +1210,8 @@
     </span> `;
     }
   };
-  PoweredByPreviewBoxElement.styles = styles4;
-  PoweredByPreviewBoxElement = __decorateClass([
-    t2("powered-by-previewbox")
-  ], PoweredByPreviewBoxElement);
+  var customElementName3 = "powered-by-previewbox";
+  definePreviewBoxCustomElement(customElementName3, PoweredByPreviewBoxElement);
 
   // src/components/favivon.styles.ts
   var styles5 = i`
@@ -1243,31 +1257,32 @@
       this.faviconUrl = null;
       this.isFaviconError = false;
     }
+    static {
+      this.styles = styles5;
+    }
     render() {
       return ke`
-    ${this.faviconUrl && !this.isFaviconError ? ke`
-          <img
-            data-testid="${TEST_IDS.FAVICON}"
-            class="previewbox-favicon"
-            part="favicon"
-            src=${this.faviconUrl ?? ""}
-            alt="Favicon"
-            @error=${() => this.isFaviconError = true}
-          />
-        ` : fallbackFavicon}
+      ${this.faviconUrl && !this.isFaviconError ? ke`
+            <img
+              data-testid="${TEST_IDS.FAVICON}"
+              class="previewbox-favicon"
+              part="favicon"
+              src=${this.faviconUrl ?? ""}
+              alt="Favicon"
+              @error=${() => this.isFaviconError = true}
+            />
+          ` : fallbackFavicon}
     `;
     }
   };
-  PreviewBoxFaviconElement.styles = styles5;
   __decorateClass([
     n4()
   ], PreviewBoxFaviconElement.prototype, "faviconUrl", 2);
   __decorateClass([
     r4()
   ], PreviewBoxFaviconElement.prototype, "isFaviconError", 2);
-  PreviewBoxFaviconElement = __decorateClass([
-    t2("previewbox-favicon")
-  ], PreviewBoxFaviconElement);
+  var customElementName4 = "previewbox-favicon";
+  definePreviewBoxCustomElement(customElementName4, PreviewBoxFaviconElement);
 
   // src/components/image.styles.ts
   var styles6 = i`
@@ -1305,6 +1320,9 @@
       this.isLoading = true;
       this.isImageError = false;
     }
+    static {
+      this.styles = styles6;
+    }
     render() {
       if (this.isLoading) {
         return ke`<previewbox-skeleton-shape
@@ -1335,7 +1353,6 @@
     `;
     }
   };
-  PreviewBoxImageElement.styles = styles6;
   __decorateClass([
     n4()
   ], PreviewBoxImageElement.prototype, "imageUrl", 2);
@@ -1348,9 +1365,8 @@
   __decorateClass([
     r4()
   ], PreviewBoxImageElement.prototype, "isImageError", 2);
-  PreviewBoxImageElement = __decorateClass([
-    t2("previewbox-image")
-  ], PreviewBoxImageElement);
+  var customElementName5 = "previewbox-image";
+  definePreviewBoxCustomElement(customElementName5, PreviewBoxImageElement);
 
   // src/link.ts
   var PreviewBoxLinkElement = class extends LinkPreviewDataDirective {
@@ -1453,6 +1469,108 @@
   PreviewBoxLinkElement = __decorateClass([
     t2("previewbox-link")
   ], PreviewBoxLinkElement);
+
+  // src/article.ts
+  var PreviewBoxArticleElement = class extends LinkPreviewDataDirective {
+    constructor() {
+      super(...arguments);
+      this.isImgError = false;
+      this.isFaviconError = false;
+    }
+    render() {
+      return ke`
+      <article part="container" class="container">
+        ${this._apiError === "API_LIMIT_REACHED" /* API_LIMIT_REACHED */ ? ke`<previewbox-limit-info></previewbox-limit-info>` : ""}
+        <a
+          href=${this.linkData.url || this.href}
+          target=${this.target}
+          part="link"
+          rel=${this.rel}
+          class="previewbox-link"
+          data-testid="${TEST_IDS.ANCHOR_ELEMENT}"
+        >
+          <div class="previewbox-content">
+            <div class="previewbox-title" data-testid="${TEST_IDS.TITLE}">
+              ${this._isLoading ? ke`<previewbox-skeleton-shape
+                    width="200px"
+                    height="20px"
+                    data-testid="${TEST_IDS.TITLE_SKELETON}"
+                  />` : this.linkData.title}
+            </div>
+            <div
+              class="previewbox-description"
+              data-testid="${TEST_IDS.DESCRIPTION}"
+            >
+              ${this._isLoading ? ke`
+                    <previewbox-skeleton-shape
+                      width="100%"
+                      height="16px"
+                    ></previewbox-skeleton-shape>
+                    <previewbox-skeleton-shape
+                      width="70%"
+                      height="16px"
+                      style="margin-top: 4px;"
+                    ></previewbox-skeleton-shape>
+                  ` : this.linkData.description}
+            </div>
+            <div class="previewbox-metadata">
+              ${this._isLoading ? ke`
+                    <div class="previewbox-metadata-skeleton">
+                      <previewbox-skeleton-shape
+                        width="14px"
+                        data-testid="${TEST_IDS.FAVICON_SKELETON}"
+                        height="14px"
+                        class="rounded"
+                      ></previewbox-skeleton-shape>
+                      <previewbox-skeleton-shape
+                        width="60px"
+                        height="14px"
+                      ></previewbox-skeleton-shape>
+                      <previewbox-skeleton-shape
+                        width="4px"
+                        height="4px"
+                        class="rounded"
+                      ></previewbox-skeleton-shape>
+                      <previewbox-skeleton-shape
+                        width="44px"
+                        height="14px"
+                      ></previewbox-skeleton-shape>
+                    </div>
+                  ` : ke`
+                    <previewbox-favicon
+                      .faviconUrl=${this.linkData.favicon}
+                    ></previewbox-favicon>
+                    <span data-testid="${TEST_IDS.ORIGIN}"
+                      >${this.linkData.origin}</span
+                    >${this.linkData.author ? ke`<span data-testid="${TEST_IDS.AUTHOR}"
+                          >${this.linkData.author}</span
+                        >` : ""}
+                  `}
+            </div>
+          </div>
+          <div class="previewbox-thumbnail">
+            <previewbox-image
+              .isLoading=${this._isLoading}
+              .imageUrl=${this.linkData?.imageUrl}
+              .imageAlt=${this.linkData?.imageAlt}
+            ></previewbox-image>
+          </div>
+        </a>
+        ${typeof this.hidePoweredBy !== "undefined" ? "" : ke`<powered-by-previewbox></powered-by-previewbox>`}
+      </article>
+    `;
+    }
+  };
+  PreviewBoxArticleElement.styles = styles;
+  __decorateClass([
+    r4()
+  ], PreviewBoxArticleElement.prototype, "isImgError", 2);
+  __decorateClass([
+    r4()
+  ], PreviewBoxArticleElement.prototype, "isFaviconError", 2);
+  PreviewBoxArticleElement = __decorateClass([
+    t2("previewbox-article")
+  ], PreviewBoxArticleElement);
 })();
 /*! Bundled license information:
 

@@ -1,8 +1,6 @@
 import {html, LitElement} from 'lit';
-import {customElement} from 'lit/decorators.js';
 import {styles} from './powered-by-previewbox.styles';
-
-@customElement('powered-by-previewbox')
+import {definePreviewBoxCustomElement} from '../lib/util/custom-elements-helper';
 export class PoweredByPreviewBoxElement extends LitElement {
   static override styles = styles;
 
@@ -14,9 +12,11 @@ export class PoweredByPreviewBoxElement extends LitElement {
   }
 }
 
-
+const customElementName = 'powered-by-previewbox' as const;
 declare global {
   interface HTMLElementTagNameMap {
-    'powered-by-previewbox': PoweredByPreviewBoxElement;
+    [customElementName]: PoweredByPreviewBoxElement;
   }
 }
+
+definePreviewBoxCustomElement(customElementName, PoweredByPreviewBoxElement);

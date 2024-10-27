@@ -1368,8 +1368,8 @@
   var customElementName5 = "previewbox-image";
   definePreviewBoxCustomElement(customElementName5, PreviewBoxImageElement);
 
-  // src/link.ts
-  var PreviewBoxLinkElement = class extends LinkPreviewDataDirective {
+  // src/article.ts
+  var PreviewBoxArticleElement = class extends LinkPreviewDataDirective {
     constructor() {
       super(...arguments);
       this.isImgError = false;
@@ -1377,7 +1377,7 @@
     }
     render() {
       return ke`
-      <figure part="container" class="container">
+      <article part="container" class="container">
         ${this._apiError === "API_LIMIT_REACHED" /* API_LIMIT_REACHED */ ? ke`<previewbox-limit-info></previewbox-limit-info>` : ""}
         <a
           href=${this.linkData.url || this.href}
@@ -1455,20 +1455,20 @@
           </div>
         </a>
         ${typeof this.hidePoweredBy !== "undefined" ? "" : ke`<powered-by-previewbox></powered-by-previewbox>`}
-      </figure>
+      </article>
     `;
     }
   };
-  PreviewBoxLinkElement.styles = styles;
+  PreviewBoxArticleElement.styles = styles;
   __decorateClass([
     r4()
-  ], PreviewBoxLinkElement.prototype, "isImgError", 2);
+  ], PreviewBoxArticleElement.prototype, "isImgError", 2);
   __decorateClass([
     r4()
-  ], PreviewBoxLinkElement.prototype, "isFaviconError", 2);
-  PreviewBoxLinkElement = __decorateClass([
-    t2("previewbox-link")
-  ], PreviewBoxLinkElement);
+  ], PreviewBoxArticleElement.prototype, "isFaviconError", 2);
+  PreviewBoxArticleElement = __decorateClass([
+    t2("previewbox-article")
+  ], PreviewBoxArticleElement);
 })();
 /*! Bundled license information:
 

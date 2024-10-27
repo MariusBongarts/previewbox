@@ -1,6 +1,6 @@
 // @ts-check
 
-const components = ['link'];
+const components = ['link', 'article'];
 
 import {exec} from 'child_process';
 import chokidar from 'chokidar';

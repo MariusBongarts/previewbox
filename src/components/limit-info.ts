@@ -1,8 +1,7 @@
 import {html, LitElement} from 'lit';
-import {customElement} from 'lit/decorators.js';
 import {styles} from './limit-info.styles';
+import { definePreviewBoxCustomElement } from '../lib/util/custom-elements-helper';
 
-@customElement('previewbox-limit-info')
 export class PreviewBoxLimitInfoElement extends LitElement {
   static override styles = styles;
 
@@ -22,8 +21,12 @@ export class PreviewBoxLimitInfoElement extends LitElement {
   }
 }
 
+const customElementName = 'previewbox-limit-info' as const;
+
 declare global {
   interface HTMLElementTagNameMap {
-    'previewbox-limit-info': PreviewBoxLimitInfoElement;
+    [customElementName]: PreviewBoxLimitInfoElement;
   }
 }
+
+definePreviewBoxCustomElement(customElementName, PreviewBoxLimitInfoElement);
