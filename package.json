@@ -1,6 +1,6 @@
 {
   "name": "@mariusbongarts/previewbox",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "A comprehensive web component suite for rendering link previews, complete with thumbnails, titles, authors, and Open Graph metadata integration.",
   "main": "dist/index.js",
   "module": "dist/index.js",

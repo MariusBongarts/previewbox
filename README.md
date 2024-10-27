@@ -22,7 +22,9 @@ Our `<previewbox-article>` component is perfect for showing a preview of an arti
 
 #### Preview
 
-[![PreviewBox Article](https://raw.githubusercontent.com/MariusBongarts/previewbox/main/assets/img/article-preview.webp)](https://web-highlights.com/about)
+<a href="https://web-highlights.com">
+<img src="https://raw.githubusercontent.com/MariusBongarts/previewbox/main/assets/img/article-preview.webp" alt="PreviewBox Article" width="300px">
+</a>
 
 ## Demo
 
@@ -46,7 +48,6 @@ To use our components via CDN, load the following script on the client side. You
 
 If you are using a bundler, you can install the package via npm:
 
-
 ```bash
 npm install @mariusbongarts/previewbox
 ```
@@ -55,11 +56,9 @@ npm install @mariusbongarts/previewbox
 yarn add @mariusbongarts/previewbox
 ```
 
-
 ```bash
 pnpm add @mariusbongarts/previewbox
 ```
-
 
 ```bash
 bun add @mariusbongarts/previewbox
@@ -78,7 +77,6 @@ import '@mariusbongarts/previewbox/dist/link/index';
 ## Usage
 
 To learn more about how to use our components, check out our [official documentation](https://previewbox.link/docs).
-
 
 ## License
 
