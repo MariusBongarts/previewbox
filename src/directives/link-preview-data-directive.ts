@@ -8,6 +8,7 @@ import {
   apiFetcher,
   isSuccessResponse,
 } from '../lib/services/api-fetcher';
+import {forceColorMode} from '../lib/util/style-helper';
 
 /**
  * Directive that either fetches link preview data from an external URL or uses manually set properties.
@@ -80,6 +81,18 @@ export class LinkPreviewDataDirective extends AnchorElementDataDirective {
     ? 'http://localhost:4444/api/v1/meta'
     : 'https://previewbox.link/api/v1/meta';
 
+  /**
+   * If set to true, the components will always be in dark mode.
+   */
+  @property()
+  dark: string | undefined = undefined;
+
+  /**
+   * If set to true, the components will always be in light mode.
+   */
+  @property()
+  light: string | undefined = undefined;
+
   @state()
   protected fetchedLinkPreviewData: LinkPreviewData | null = null;
 
@@ -110,6 +123,12 @@ export class LinkPreviewDataDirective extends AnchorElementDataDirective {
   }
 
   protected override firstUpdated(_changedProperties: PropertyValues): void {
+    if (typeof this.dark !== 'undefined') {
+      forceColorMode(this, 'dark');
+    }
+    if (typeof this.light !== 'undefined') {
+      forceColorMode(this, 'light');
+    }
     if (!this.href && !this.url) {
       throw new Error(`No href or url provided for ${this.localName}`);
     }

@@ -30,9 +30,9 @@
         
      <h1>API</h1>
      
-       <h2>&lt;previewbox-link></h2>
+       <h2>&lt;previewbox-article></h2>
        <div>
-         Previewbox Link | <previewbox-link>
+         Previewbox Link | <previewbox-article>
        </div>
        
    <h3>Attributes</h3>
@@ -84,6 +84,14 @@ If not provided, a fallback favicon will be used.</td><td>string | null</td><td>
          <td>apiUrl</td><td>The URL of the API to fetch the link preview data from.
 
 Defaults to the Previewbox API.</td><td>string</td><td></td>
+       </tr>
+     
+       <tr>
+         <td>dark</td><td>If set to true, the components will always be in dark mode.</td><td>string | undefined</td><td>undefined</td>
+       </tr>
+     
+       <tr>
+         <td>light</td><td>If set to true, the components will always be in light mode.</td><td>string | undefined</td><td>undefined</td>
        </tr>
      
        <tr>
@@ -160,6 +168,220 @@ If not provided, a fallback favicon will be used.</td><td>string | null</td><td>
          <td>apiUrl</td><td>apiUrl</td><td>The URL of the API to fetch the link preview data from.
 
 Defaults to the Previewbox API.</td><td>string</td><td></td>
+       </tr>
+     
+       <tr>
+         <td>dark</td><td>dark</td><td>If set to true, the components will always be in dark mode.</td><td>string | undefined</td><td>undefined</td>
+       </tr>
+     
+       <tr>
+         <td>light</td><td>light</td><td>If set to true, the components will always be in light mode.</td><td>string | undefined</td><td>undefined</td>
+       </tr>
+     
+       <tr>
+         <td>fetchedLinkPreviewData</td><td></td><td></td><td>LinkPreviewData | null</td><td>null</td>
+       </tr>
+     
+       <tr>
+         <td>_isLoading</td><td></td><td></td><td>boolean</td><td>false</td>
+       </tr>
+     
+       <tr>
+         <td>_isError</td><td></td><td></td><td>boolean</td><td>false</td>
+       </tr>
+     
+       <tr>
+         <td>_apiError</td><td></td><td></td><td>ApiError | null</td><td>null</td>
+       </tr>
+     
+       <tr>
+         <td>linkData</td><td></td><td></td><td>LinkPreviewData</td><td></td>
+       </tr>
+     
+       <tr>
+         <td>href</td><td>href</td><td>The URL to fetch the meta data from. E.g. https://web-highlights.com/.
+
+Reads the open graph data from the provided URL.</td><td>string</td><td>''</td>
+       </tr>
+     
+       <tr>
+         <td>target</td><td>target</td><td>The target attribute for the a-element. E.g. '_blank'.</td><td>string</td><td>'_blank'</td>
+       </tr>
+     
+       <tr>
+         <td>rel</td><td>rel</td><td>The rel attribute for the a-element. E.g. 'noopener noreferrer'.</td><td>string</td><td>''</td>
+       </tr>
+     
+   </table>
+   
+       
+           
+         
+       
+   <h3>CSS Shadow Parts</h3>
+   <table>
+     <tr>
+       <th>Name</th><th>Description</th>
+     </tr>
+     
+       <tr>
+         <td>link</td><td>The a-element that contains the link</td>
+       </tr>
+     
+       <tr>
+         <td>container</td><td>The container element that contains the anchor element</td>
+       </tr>
+     
+   </table>
+ 
+       
+       
+       <h2>&lt;previewbox-link></h2>
+       <div>
+         Previewbox Link | <previewbox-link>
+       </div>
+       
+   <h3>Attributes</h3>
+   <table>
+     <tr>
+       <th>Name</th><th>Description</th><th>Type</th><th>Default</th>
+     </tr>
+     
+       <tr>
+         <td>url</td><td>
+If the href is not provided, the url will be used to fetch the link preview data.</td><td>string | null</td><td>null</td>
+       </tr>
+     
+       <tr>
+         <td>title</td><td>A manually set title for the link preview.</td><td>string</td><td>''</td>
+       </tr>
+     
+       <tr>
+         <td>description</td><td>A manually set description for the link preview.</td><td>string | null</td><td>null</td>
+       </tr>
+     
+       <tr>
+         <td>author</td><td>A manually set author for the link preview.</td><td>string | null</td><td>null</td>
+       </tr>
+     
+       <tr>
+         <td>imageUrl</td><td>A manually set image URL for the link preview.</td><td>string | null</td><td>null</td>
+       </tr>
+     
+       <tr>
+         <td>imageAlt</td><td>A manually set image alt text for the link preview.</td><td>string | null</td><td>null</td>
+       </tr>
+     
+       <tr>
+         <td>faviconUrl</td><td>A manually set favicon URL for the link preview.
+
+If not provided, a fallback favicon will be used.</td><td>string | null</td><td>null</td>
+       </tr>
+     
+       <tr>
+         <td>date</td><td>A manually set date for the link preview.</td><td>string | null</td><td>null</td>
+       </tr>
+     
+       <tr>
+         <td>hidePoweredBy</td><td>If set to true, the Powered by Previewbox info will not be shown.</td><td>string | undefined</td><td>undefined</td>
+       </tr>
+     
+       <tr>
+         <td>apiUrl</td><td>The URL of the API to fetch the link preview data from.
+
+Defaults to the Previewbox API.</td><td>string</td><td></td>
+       </tr>
+     
+       <tr>
+         <td>dark</td><td>If set to true, the components will always be in dark mode.</td><td>string | undefined</td><td>undefined</td>
+       </tr>
+     
+       <tr>
+         <td>light</td><td>If set to true, the components will always be in light mode.</td><td>string | undefined</td><td>undefined</td>
+       </tr>
+     
+       <tr>
+         <td>href</td><td>The URL to fetch the meta data from. E.g. https://web-highlights.com/.
+
+Reads the open graph data from the provided URL.</td><td>string</td><td>''</td>
+       </tr>
+     
+       <tr>
+         <td>target</td><td>The target attribute for the a-element. E.g. '_blank'.</td><td>string</td><td>'_blank'</td>
+       </tr>
+     
+       <tr>
+         <td>rel</td><td>The rel attribute for the a-element. E.g. 'noopener noreferrer'.</td><td>string</td><td>''</td>
+       </tr>
+     
+   </table>
+ 
+       
+   <h3>Properties</h3>
+   <table>
+     <tr>
+       <th>Name</th><th>Attribute</th><th>Description</th><th>Type</th><th>Default</th>
+     </tr>
+     
+       <tr>
+         <td>isImgError</td><td></td><td></td><td>boolean</td><td>false</td>
+       </tr>
+     
+       <tr>
+         <td>isFaviconError</td><td></td><td></td><td>boolean</td><td>false</td>
+       </tr>
+     
+       <tr>
+         <td>url</td><td>url</td><td>
+If the href is not provided, the url will be used to fetch the link preview data.</td><td>string | null</td><td>null</td>
+       </tr>
+     
+       <tr>
+         <td>title</td><td>title</td><td>A manually set title for the link preview.</td><td>string</td><td>''</td>
+       </tr>
+     
+       <tr>
+         <td>description</td><td>description</td><td>A manually set description for the link preview.</td><td>string | null</td><td>null</td>
+       </tr>
+     
+       <tr>
+         <td>author</td><td>author</td><td>A manually set author for the link preview.</td><td>string | null</td><td>null</td>
+       </tr>
+     
+       <tr>
+         <td>imageUrl</td><td>imageUrl</td><td>A manually set image URL for the link preview.</td><td>string | null</td><td>null</td>
+       </tr>
+     
+       <tr>
+         <td>imageAlt</td><td>imageAlt</td><td>A manually set image alt text for the link preview.</td><td>string | null</td><td>null</td>
+       </tr>
+     
+       <tr>
+         <td>faviconUrl</td><td>faviconUrl</td><td>A manually set favicon URL for the link preview.
+
+If not provided, a fallback favicon will be used.</td><td>string | null</td><td>null</td>
+       </tr>
+     
+       <tr>
+         <td>date</td><td>date</td><td>A manually set date for the link preview.</td><td>string | null</td><td>null</td>
+       </tr>
+     
+       <tr>
+         <td>hidePoweredBy</td><td>hidePoweredBy</td><td>If set to true, the Powered by Previewbox info will not be shown.</td><td>string | undefined</td><td>undefined</td>
+       </tr>
+     
+       <tr>
+         <td>apiUrl</td><td>apiUrl</td><td>The URL of the API to fetch the link preview data from.
+
+Defaults to the Previewbox API.</td><td>string</td><td></td>
+       </tr>
+     
+       <tr>
+         <td>dark</td><td>dark</td><td>If set to true, the components will always be in dark mode.</td><td>string | undefined</td><td>undefined</td>
+       </tr>
+     
+       <tr>
+         <td>light</td><td>light</td><td>If set to true, the components will always be in light mode.</td><td>string | undefined</td><td>undefined</td>
        </tr>
      
        <tr>

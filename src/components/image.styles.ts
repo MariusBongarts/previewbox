@@ -17,20 +17,11 @@ export const styles = css`
     margin: 0;
     background-color: var(--pb-fallback-img-background);
 
-    @media (prefers-color-scheme: dark) {
-      background-color: var(--pb-dark-fallback-img-background);
-    }
 
     svg {
       width: 40px;
       height: 40px;
       color: var(--pb-fallback-img-color);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      svg {
-        color: var(--pb-dark-fallback-img-color);
-      }
     }
   }
 `;

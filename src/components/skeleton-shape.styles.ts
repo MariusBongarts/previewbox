@@ -24,10 +24,4 @@ export const styles = css`
       opacity: 0.7;
     }
   }
-
-  @media (prefers-color-scheme: dark) {
-    :host {
-      --skeleton-color: var(--pb-dark-skeleton-color);
-    }
-  }
 `;

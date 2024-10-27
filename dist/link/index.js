@@ -597,34 +597,127 @@
     return n4({ ...r5, state: true, attribute: false });
   }
 
-  // src/link.styles.ts
-  var styles = i`
+  // src/lib/util/style-helper.ts
+  var cssVars = {
+    "--pb-background-color": {
+      light: i`#ffffff`,
+      dark: i`#121212`
+    },
+    "--pb-text-color": {
+      light: i`#000000`,
+      dark: i`#e0e0e0`
+    },
+    "--pb-border-color": {
+      light: i`rgba(124, 139, 154, 0.25)`,
+      dark: i`#80808034`
+    },
+    "--pb-metadata-color": {
+      light: i`rgba(0, 0, 0, 0.7)`,
+      dark: i`rgba(255, 255, 255, 0.8)`
+    },
+    "--pb-fallback-img-color": {
+      light: i`hsl(220, 13%, 80%)`,
+      dark: i`hsl(220, 13%, 40%)`
+    },
+    "--pb-fallback-img-background": {
+      light: i`rgb(229, 231, 235)`,
+      dark: i`rgb(55, 65, 81)`
+    },
+    "--pb-skeleton-color": {
+      light: i`rgb(229, 231, 235)`,
+      dark: i`rgb(55, 65, 81)`
+    }
+  };
+  function generateDefaultCssVars() {
+    return i`
+    :host {
+      --pb-background-color: ${cssVars["--pb-background-color"].light};
+      --pb-dark-background-color: ${cssVars["--pb-background-color"].dark};
+      --pb-text-color: ${cssVars["--pb-text-color"].light};
+      --pb-dark-text-color: ${cssVars["--pb-text-color"].dark};
+      --pb-border-color: ${cssVars["--pb-border-color"].light};
+      --pb-dark-border-color: ${cssVars["--pb-border-color"].dark};
+      --pb-metadata-color: ${cssVars["--pb-metadata-color"].light};
+      --pb-dark-metadata-color: ${cssVars["--pb-metadata-color"].dark};
+      --pb-skeleton-color: ${cssVars["--pb-skeleton-color"].light};
+      --pb-dark-skeleton-color: ${cssVars["--pb-skeleton-color"].dark};
+      --pb-fallback-img-color: ${cssVars["--pb-fallback-img-color"].light};
+      --pb-dark-fallback-img-color: ${cssVars["--pb-fallback-img-color"].dark};
+      --pb-fallback-img-background: ${cssVars["--pb-fallback-img-background"].light};
+      --pb-dark-fallback-img-background: ${cssVars["--pb-fallback-img-background"].dark};
+      --pb-favicon-size: 20px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :host {
+        --pb-background-color: var(--pb-dark-background-color);
+        --pb-text-color: var(--pb-dark-text-color);
+        --pb-border-color: var(--pb-dark-border-color);
+        --pb-metadata-color: var(--pb-dark-metadata-color);
+        --pb-fallback-img-color: var(--pb-dark-fallback-img-color);
+        --pb-fallback-img-background: var(--pb-dark-fallback-img-background);
+        --pb-skeleton-color: var(--pb-dark-skeleton-color);
+      }
+    }
+  `;
+  }
+  function forceColorMode(element, colorMode) {
+    Object.keys(cssVars).forEach((key) => {
+      element.style.setProperty(
+        key,
+        cssVars[key][colorMode].toString()
+      );
+    });
+  }
+
+  // src/shared.styles.ts
+  var sharedStyles = i`
+  ${generateDefaultCssVars()}
   :host {
     display: block;
     box-sizing: border-box;
     width: 100%;
     font-family: inherit;
-    --pb-background-color: #ffffff;
-    --pb-dark-background-color: #121212;
-    --pb-text-color: #000000;
-    --pb-border-color: rgb(124 139 154 / 25%);
-    --pb-metadata-color: rgba(0, 0, 0, 0.7);
-    --pb-dark-text-color: #e0e0e0;
-    --pb-dark-border-color: #8080803a;
-    --pb-dark-metadata-color: rgba(255, 255, 255, 0.7);
-    --pb-skeleton-color: rgb(229, 231, 235);
-    --pb-dark-skeleton-color: rgb(55, 65, 81);
-    --pb-fallback-img-color: hsl(220, 13%, 80%);
-    --pb-fallback-img-background: rgb(229, 231, 235);
-    --pb-dark-fallback-img-color: hsl(220, 13%, 40%);
-    --pb-dark-fallback-img-background: rgb(55, 65, 81);
-    --pb-favicon-size: 20px;
   }
+
 
   .container {
     margin: 0;
     padding: 0;
     background-color: var(--pb-background-color);
+  }
+
+  .previewbox-title,
+  .previewbox-link {
+    color: var(--pb-text-color);
+  }
+
+  .previewbox-description {
+    color: var(--pb-metadata-color);
+  }
+
+  .previewbox-link {
+    text-decoration: none;
+    display: flex;
+    text-decoration: none;
+    color: inherit;
+  }
+`;
+
+  // src/link.styles.ts
+  var styles = i`
+  ${sharedStyles}
+  :host {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    font-family: inherit;
+  }
+
+  .container {
+    background-color: var(--pb-background-color);
+    margin: 0;
+    padding: 0;
     overflow: hidden;
     border-radius: 3px;
     border: 1px solid var(--pb-border-color);
@@ -730,26 +823,6 @@
     min-width: 33%;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :host {
-      --pb-background-color: var(--pb-dark-background-color);
-      --pb-text-color: var(--pb-dark-text-color);
-      --pb-border-color: var(--pb-dark-border-color);
-      --pb-metadata-color: var(--pb-dark-metadata-color);
-    }
-
-    .previewbox-title {
-      color: var(--pb-dark-text-color);
-    }
-
-    .previewbox-description {
-      color: var(--pb-dark-metadata-color);
-    }
-
-    .previewbox-metadata {
-      color: var(--pb-dark-metadata-color);
-    }
-  }
 
 `;
 
@@ -832,6 +905,8 @@
       this.date = null;
       this.hidePoweredBy = void 0;
       this.apiUrl = window.location.href.startsWith("http://localhost:8000/demo") ? "http://localhost:4444/api/v1/meta" : "https://previewbox.link/api/v1/meta";
+      this.dark = void 0;
+      this.light = void 0;
       this.fetchedLinkPreviewData = null;
       this._isLoading = false;
       this._isError = false;
@@ -854,6 +929,12 @@
       };
     }
     firstUpdated(_changedProperties) {
+      if (typeof this.dark !== "undefined") {
+        forceColorMode(this, "dark");
+      }
+      if (typeof this.light !== "undefined") {
+        forceColorMode(this, "light");
+      }
       if (!this.href && !this.url) {
         throw new Error(`No href or url provided for ${this.localName}`);
       }
@@ -932,6 +1013,12 @@
     n4()
   ], LinkPreviewDataDirective.prototype, "apiUrl", 2);
   __decorateClass([
+    n4()
+  ], LinkPreviewDataDirective.prototype, "dark", 2);
+  __decorateClass([
+    n4()
+  ], LinkPreviewDataDirective.prototype, "light", 2);
+  __decorateClass([
     r4()
   ], LinkPreviewDataDirective.prototype, "fetchedLinkPreviewData", 2);
   __decorateClass([
@@ -985,12 +1072,6 @@
     }
     50% {
       opacity: 0.7;
-    }
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :host {
-      --skeleton-color: var(--pb-dark-skeleton-color);
     }
   }
 `;
@@ -1206,20 +1287,11 @@
     margin: 0;
     background-color: var(--pb-fallback-img-background);
 
-    @media (prefers-color-scheme: dark) {
-      background-color: var(--pb-dark-fallback-img-background);
-    }
 
     svg {
       width: 40px;
       height: 40px;
       color: var(--pb-fallback-img-color);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      svg {
-        color: var(--pb-dark-fallback-img-color);
-      }
     }
   }
 `;

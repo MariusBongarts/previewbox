@@ -4,17 +4,8 @@ import {sharedStyles} from './shared.styles';
 
 export const styles = css`
   ${sharedStyles}
-  :host {
-    display: block;
-    box-sizing: border-box;
-    width: 100%;
-    font-family: inherit;
-  }
 
   .container {
-    background-color: var(--pb-background-color);
-    margin: 0;
-    padding: 0;
     overflow: hidden;
     border-radius: 3px;
     border: 1px solid var(--pb-border-color);
@@ -23,7 +14,6 @@ export const styles = css`
 
   .previewbox-link {
     text-decoration: none;
-    color: var(--pb-text-color);
     display: flex;
     text-decoration: none;
     color: inherit;
@@ -52,7 +42,6 @@ export const styles = css`
       line-height: 1.4;
       height: 24px;
     }
-    color: var(--pb-text-color);
   }
 
   .previewbox-description {
@@ -67,7 +56,6 @@ export const styles = css`
     opacity: 0.7;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    color: var(--pb-metadata-color);
   }
 
   .previewbox-metadata {
@@ -88,11 +76,6 @@ export const styles = css`
       .rounded::part(skeleton-shape) {
         border-radius: 50%;
       }
-    }
-    svg {
-      width: var(--pb-favicon-size);
-      height: var(--pb-favicon-size);
-      margin-right: 6px;
     }
   }
 
