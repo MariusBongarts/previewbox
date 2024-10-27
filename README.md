@@ -1,4 +1,5 @@
-# PreviewBox &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/MariusBongarts/previewbox/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/@mariusbongarts/previewbox.svg?style=flat)](https://www.npmjs.com/package/@mariusbongarts/previewbox) [![CI](https://github.com/MariusBongarts/previewbox/actions/workflows/main.yml/badge.svg)](https://github.com/MariusBongarts/previewbox/actions/workflows/main.yml)
+# PreviewBox &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/MariusBongarts/previewbox/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/@mariusbongarts/previewbox.svg?style=flat)](https://www.npmjs.com/package/@mariusbongarts/previewbox) [![CI](https://github.com/MariusBongarts/previewbox/actions/workflows/main.yml/badge.svg)](https://github.com/MariusBongarts/previewbox/actions/workflows/main.yml) [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/@mariusbongarts/previewbox)
+
 
 ## Overview
 
