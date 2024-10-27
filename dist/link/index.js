@@ -603,6 +603,10 @@
       light: i`#ffffff`,
       dark: i`#121212`
     },
+    "--pb-background-color-hover": {
+      light: i`#f9fafb`,
+      dark: i`#1e293b`
+    },
     "--pb-text-color": {
       light: i`#000000`,
       dark: i`#e0e0e0`
@@ -611,7 +615,7 @@
       light: i`rgba(124, 139, 154, 0.25)`,
       dark: i`#80808034`
     },
-    "--pb-metadata-color": {
+    "--pb-text-color-light": {
       light: i`rgba(0, 0, 0, 0.7)`,
       dark: i`rgba(255, 255, 255, 0.8)`
     },
@@ -633,12 +637,14 @@
     :host {
       --pb-background-color: ${cssVars["--pb-background-color"].light};
       --pb-dark-background-color: ${cssVars["--pb-background-color"].dark};
+      --pb-background-color-hover: ${cssVars["--pb-background-color-hover"].light};
+      --pb-dark-background-color-hover: ${cssVars["--pb-background-color-hover"].dark};
       --pb-text-color: ${cssVars["--pb-text-color"].light};
       --pb-dark-text-color: ${cssVars["--pb-text-color"].dark};
       --pb-border-color: ${cssVars["--pb-border-color"].light};
       --pb-dark-border-color: ${cssVars["--pb-border-color"].dark};
-      --pb-metadata-color: ${cssVars["--pb-metadata-color"].light};
-      --pb-dark-metadata-color: ${cssVars["--pb-metadata-color"].dark};
+      --pb-text-color-light: ${cssVars["--pb-text-color-light"].light};
+      --pb-dark-metadata-color: ${cssVars["--pb-text-color-light"].dark};
       --pb-skeleton-color: ${cssVars["--pb-skeleton-color"].light};
       --pb-dark-skeleton-color: ${cssVars["--pb-skeleton-color"].dark};
       --pb-fallback-img-color: ${cssVars["--pb-fallback-img-color"].light};
@@ -651,9 +657,10 @@
     @media (prefers-color-scheme: dark) {
       :host {
         --pb-background-color: var(--pb-dark-background-color);
+        --pb-background-color-hover: var(--pb-dark-background-color-hover);
         --pb-text-color: var(--pb-dark-text-color);
         --pb-border-color: var(--pb-dark-border-color);
-        --pb-metadata-color: var(--pb-dark-metadata-color);
+        --pb-text-color-light: var(--pb-dark-metadata-color);
         --pb-fallback-img-color: var(--pb-dark-fallback-img-color);
         --pb-fallback-img-background: var(--pb-dark-fallback-img-background);
         --pb-skeleton-color: var(--pb-dark-skeleton-color);
@@ -693,7 +700,7 @@
   }
 
   .previewbox-description {
-    color: var(--pb-metadata-color);
+    color: var(--pb-text-color-light);
   }
 
   .previewbox-link {
@@ -770,7 +777,7 @@
     opacity: 0.7;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    color: var(--pb-metadata-color);
+    color: var(--pb-text-color-light);
   }
 
   .previewbox-metadata {
@@ -782,7 +789,7 @@
     font-size: 0.75rem;
     font-weight: 500;
     white-space: nowrap;
-    color: var(--pb-metadata-color);
+    color: var(--pb-text-color-light);
     .previewbox-metadata-skeleton {
       display: flex;
       column-gap: 4px;
@@ -1046,7 +1053,9 @@
     ANCHOR_ELEMENT: "ANCHOR_ELEMENT",
     TITLE: "TITLE",
     TITLE_SKELETON: "TITLE_SKELETON",
-    DESCRIPTION: "DESCRIPTION"
+    DESCRIPTION: "DESCRIPTION",
+    READ_MORE_BUTTON: "READ_MORE_BUTTON",
+    POWERED_BY: "POWERED_BY"
   };
 
   // src/components/skeleton-shape.styles.ts
@@ -1130,6 +1139,7 @@
     align-items: center;
     justify-content: center;
     z-index: 2;
+    text-align: center;
   }
 
   .limit-info-container {
@@ -1370,11 +1380,6 @@
 
   // src/link.ts
   var PreviewBoxLinkElement = class extends LinkPreviewDataDirective {
-    constructor() {
-      super(...arguments);
-      this.isImgError = false;
-      this.isFaviconError = false;
-    }
     render() {
       return ke`
       <figure part="container" class="container">
@@ -1454,18 +1459,14 @@
             ></previewbox-image>
           </div>
         </a>
-        ${typeof this.hidePoweredBy !== "undefined" ? "" : ke`<powered-by-previewbox></powered-by-previewbox>`}
+        ${typeof this.hidePoweredBy !== "undefined" ? "" : ke`<powered-by-previewbox
+              data-testid="${TEST_IDS.POWERED_BY}"
+            ></powered-by-previewbox>`}
       </figure>
     `;
     }
   };
   PreviewBoxLinkElement.styles = styles;
-  __decorateClass([
-    r4()
-  ], PreviewBoxLinkElement.prototype, "isImgError", 2);
-  __decorateClass([
-    r4()
-  ], PreviewBoxLinkElement.prototype, "isFaviconError", 2);
   PreviewBoxLinkElement = __decorateClass([
     t2("previewbox-link")
   ], PreviewBoxLinkElement);

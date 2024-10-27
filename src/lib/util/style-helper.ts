@@ -6,6 +6,10 @@ const cssVars: Record<string, Record<ColorMode, CSSResultGroup>> = {
     light: css`#ffffff`,
     dark: css`#121212`,
   },
+  '--pb-background-color-hover': {
+    light: css`#f9fafb`,
+    dark: css`#1e293b`,
+  },
   '--pb-text-color': {
     light: css`#000000`,
     dark: css`#e0e0e0`,
@@ -14,7 +18,7 @@ const cssVars: Record<string, Record<ColorMode, CSSResultGroup>> = {
     light: css`rgba(124, 139, 154, 0.25)`,
     dark: css`#80808034`,
   },
-  '--pb-metadata-color': {
+  '--pb-text-color-light': {
     light: css`rgba(0, 0, 0, 0.7)`,
     dark: css`rgba(255, 255, 255, 0.8)`,
   },
@@ -37,12 +41,15 @@ export function generateDefaultCssVars(): CSSResultGroup {
     :host {
       --pb-background-color: ${cssVars['--pb-background-color'].light};
       --pb-dark-background-color: ${cssVars['--pb-background-color'].dark};
+      --pb-background-color-hover: ${cssVars['--pb-background-color-hover'].light};
+      --pb-dark-background-color-hover: ${cssVars['--pb-background-color-hover']
+        .dark};
       --pb-text-color: ${cssVars['--pb-text-color'].light};
       --pb-dark-text-color: ${cssVars['--pb-text-color'].dark};
       --pb-border-color: ${cssVars['--pb-border-color'].light};
       --pb-dark-border-color: ${cssVars['--pb-border-color'].dark};
-      --pb-metadata-color: ${cssVars['--pb-metadata-color'].light};
-      --pb-dark-metadata-color: ${cssVars['--pb-metadata-color'].dark};
+      --pb-text-color-light: ${cssVars['--pb-text-color-light'].light};
+      --pb-dark-metadata-color: ${cssVars['--pb-text-color-light'].dark};
       --pb-skeleton-color: ${cssVars['--pb-skeleton-color'].light};
       --pb-dark-skeleton-color: ${cssVars['--pb-skeleton-color'].dark};
       --pb-fallback-img-color: ${cssVars['--pb-fallback-img-color'].light};
@@ -58,9 +65,10 @@ export function generateDefaultCssVars(): CSSResultGroup {
     @media (prefers-color-scheme: dark) {
       :host {
         --pb-background-color: var(--pb-dark-background-color);
+        --pb-background-color-hover: var(--pb-dark-background-color-hover);
         --pb-text-color: var(--pb-dark-text-color);
         --pb-border-color: var(--pb-dark-border-color);
-        --pb-metadata-color: var(--pb-dark-metadata-color);
+        --pb-text-color-light: var(--pb-dark-metadata-color);
         --pb-fallback-img-color: var(--pb-dark-fallback-img-color);
         --pb-fallback-img-background: var(--pb-dark-fallback-img-background);
         --pb-skeleton-color: var(--pb-dark-skeleton-color);

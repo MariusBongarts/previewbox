@@ -24,7 +24,7 @@ export const sharedStyles = css`
   }
 
   .previewbox-description {
-    color: var(--pb-metadata-color);
+    color: var(--pb-text-color-light);
   }
 
   .previewbox-link {

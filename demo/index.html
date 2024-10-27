@@ -39,28 +39,48 @@
         width: 100%;
         box-sizing: border-box;
       }
+      .section-heading {
+        display: block;
+        margin-bottom: 12px;
+      }
     </style>
   </head>
   <body>
     <section>
+      <span class="section-heading">previewbox-link: Default</span>
       <previewbox-link hidePoweredBy href="https://web-highlights.com/" />
     </section>
-    <section>
-      <previewbox-article hidePoweredBy href="https://web-highlights.com/" />
+    <span class="section-heading">previewbox-article</span>
+    <section style="display: flex; gap: 16px; flex-wrap: wrap">
+      <previewbox-article
+        hidePoweredBy
+        href="https://tooltivity.com"
+      ></previewbox-article>
+      <previewbox-article
+        href="https://tooltivity.com/extensions/web-highlights"
+      ></previewbox-article>
+      <previewbox-article
+        href="https://blog.marius-bongarts.de/the-art-of-slow-growth-how-i-calmly-grew-my-chrome-extension-to-100k-users-in-5-years"
+      ></previewbox-article>
+      <previewbox-article
+        hidePoweredBy
+        href="https://web-highlights.com/"
+        dark
+      ></previewbox-article>
     </section>
     <section>
-      <previewbox-article hidePoweredBy href="https://web-highlights.com/" dark />
+      <span class="section-heading">previewbox-link: Default</span>
+      <previewbox-link
+        href="https://web-highlights.com/blog/welcome"
+      ></previewbox-link>
     </section>
     <section>
-      <previewbox-link href="https://web-highlights.com/blog/welcome" />
+      <span class="section-heading">previewbox-link: Forced Light Mode</span>
+      <previewbox-link href="https://tooltivity.com" light></previewbox-link>
     </section>
     <section>
-      <span style="margin-bottom: 12px; display: block">Forced Light Mode</span>
-      <previewbox-link href="https://tooltivity.com" light />
-    </section>
-    <section>
-      <span style="margin-bottom: 12px; display: block">Forced Dark Mode</span>
-      <previewbox-link href="https://tooltivity.com" dark />
+      <span class="section-heading">previewbox-link: Forced Dark Mode</span>
+      <previewbox-link href="https://tooltivity.com" dark></previewbox-link>
     </section>
     <section>
       <previewbox-link
@@ -72,9 +92,10 @@
         imageUrl="https://images.pexels.com/photos/356056/pexels-photo-356056.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&dpr=2"
         imageAlt="Manually set image alt"
         faviconUrl="https://web-highlights.com/favicon.ico"
-      />
+      ></previewbox-link>
     </section>
     <section>
+      <span class="section-heading">previewbox-link: Manual set data</span>
       <previewbox-link
         url="https://example.org/test"
         date="2024-01-01"
@@ -84,9 +105,10 @@
         imageUrl="https://errorimages.pexels.com"
         imageAlt="Manually set image alt"
         faviconUrl="https://error.com/error.ico"
-      />
+      ></previewbox-link>
     </section>
     <section>
+      <span class="section-heading">previewbox-link: Manual set data</span>
       <previewbox-link
         url="https://web-highlights.com/about"
         date="2024-01-01"

@@ -603,6 +603,10 @@
       light: i`#ffffff`,
       dark: i`#121212`
     },
+    "--pb-background-color-hover": {
+      light: i`#f9fafb`,
+      dark: i`#1e293b`
+    },
     "--pb-text-color": {
       light: i`#000000`,
       dark: i`#e0e0e0`
@@ -611,7 +615,7 @@
       light: i`rgba(124, 139, 154, 0.25)`,
       dark: i`#80808034`
     },
-    "--pb-metadata-color": {
+    "--pb-text-color-light": {
       light: i`rgba(0, 0, 0, 0.7)`,
       dark: i`rgba(255, 255, 255, 0.8)`
     },
@@ -633,12 +637,14 @@
     :host {
       --pb-background-color: ${cssVars["--pb-background-color"].light};
       --pb-dark-background-color: ${cssVars["--pb-background-color"].dark};
+      --pb-background-color-hover: ${cssVars["--pb-background-color-hover"].light};
+      --pb-dark-background-color-hover: ${cssVars["--pb-background-color-hover"].dark};
       --pb-text-color: ${cssVars["--pb-text-color"].light};
       --pb-dark-text-color: ${cssVars["--pb-text-color"].dark};
       --pb-border-color: ${cssVars["--pb-border-color"].light};
       --pb-dark-border-color: ${cssVars["--pb-border-color"].dark};
-      --pb-metadata-color: ${cssVars["--pb-metadata-color"].light};
-      --pb-dark-metadata-color: ${cssVars["--pb-metadata-color"].dark};
+      --pb-text-color-light: ${cssVars["--pb-text-color-light"].light};
+      --pb-dark-metadata-color: ${cssVars["--pb-text-color-light"].dark};
       --pb-skeleton-color: ${cssVars["--pb-skeleton-color"].light};
       --pb-dark-skeleton-color: ${cssVars["--pb-skeleton-color"].dark};
       --pb-fallback-img-color: ${cssVars["--pb-fallback-img-color"].light};
@@ -651,9 +657,10 @@
     @media (prefers-color-scheme: dark) {
       :host {
         --pb-background-color: var(--pb-dark-background-color);
+        --pb-background-color-hover: var(--pb-dark-background-color-hover);
         --pb-text-color: var(--pb-dark-text-color);
         --pb-border-color: var(--pb-dark-border-color);
-        --pb-metadata-color: var(--pb-dark-metadata-color);
+        --pb-text-color-light: var(--pb-dark-metadata-color);
         --pb-fallback-img-color: var(--pb-dark-fallback-img-color);
         --pb-fallback-img-background: var(--pb-dark-fallback-img-background);
         --pb-skeleton-color: var(--pb-dark-skeleton-color);
@@ -693,7 +700,7 @@
   }
 
   .previewbox-description {
-    color: var(--pb-metadata-color);
+    color: var(--pb-text-color-light);
   }
 
   .previewbox-link {
@@ -770,7 +777,7 @@
     opacity: 0.7;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    color: var(--pb-metadata-color);
+    color: var(--pb-text-color-light);
   }
 
   .previewbox-metadata {
@@ -782,7 +789,7 @@
     font-size: 0.75rem;
     font-weight: 500;
     white-space: nowrap;
-    color: var(--pb-metadata-color);
+    color: var(--pb-text-color-light);
     .previewbox-metadata-skeleton {
       display: flex;
       column-gap: 4px;
@@ -1046,7 +1053,9 @@
     ANCHOR_ELEMENT: "ANCHOR_ELEMENT",
     TITLE: "TITLE",
     TITLE_SKELETON: "TITLE_SKELETON",
-    DESCRIPTION: "DESCRIPTION"
+    DESCRIPTION: "DESCRIPTION",
+    READ_MORE_BUTTON: "READ_MORE_BUTTON",
+    POWERED_BY: "POWERED_BY"
   };
 
   // src/components/skeleton-shape.styles.ts
@@ -1130,6 +1139,7 @@
     align-items: center;
     justify-content: center;
     z-index: 2;
+    text-align: center;
   }
 
   .limit-info-container {
@@ -1370,11 +1380,6 @@
 
   // src/link.ts
   var PreviewBoxLinkElement = class extends LinkPreviewDataDirective {
-    constructor() {
-      super(...arguments);
-      this.isImgError = false;
-      this.isFaviconError = false;
-    }
     render() {
       return ke`
       <figure part="container" class="container">
@@ -1454,28 +1459,127 @@
             ></previewbox-image>
           </div>
         </a>
-        ${typeof this.hidePoweredBy !== "undefined" ? "" : ke`<powered-by-previewbox></powered-by-previewbox>`}
+        ${typeof this.hidePoweredBy !== "undefined" ? "" : ke`<powered-by-previewbox
+              data-testid="${TEST_IDS.POWERED_BY}"
+            ></powered-by-previewbox>`}
       </figure>
     `;
     }
   };
   PreviewBoxLinkElement.styles = styles;
-  __decorateClass([
-    r4()
-  ], PreviewBoxLinkElement.prototype, "isImgError", 2);
-  __decorateClass([
-    r4()
-  ], PreviewBoxLinkElement.prototype, "isFaviconError", 2);
   PreviewBoxLinkElement = __decorateClass([
     t2("previewbox-link")
   ], PreviewBoxLinkElement);
+
+  // src/article.styles.ts
+  var styles7 = i`
+  ${sharedStyles}
+
+  :host {
+    max-width: 320px;
+  }
+
+  .container {
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+      0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .previewbox-link {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    flex: 1;
+  }
+
+  .previewbox-content {
+    padding: 16px;
+    overflow: hidden;
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .previewbox-title {
+    display: -webkit-box;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.2;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow-y: hidden;
+    margin-bottom: 8px;
+
+    @media (min-width: 768px) {
+      font-size: 1.2rem;
+    }
+  }
+
+  .previewbox-description {
+    display: -webkit-box;
+    font-size: 0.875rem;
+    line-height: 1.5em;
+    margin-top: 3px;
+    font-weight: 400;
+    width: 100%;
+    overflow-y: hidden;
+    opacity: 0.7;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+
+  .previewbox-thumbnail {
+    position: relative;
+    width: 100%;
+    height: 180px;
+  }
+
+  .previewbox-read-more-container {
+    margin-top: auto;
+  }
+
+  .previewbox-read-more {
+    display: flex;
+    align-items: center;
+    margin-top: 24px;
+    padding: 8px;
+    gap: 4px;
+    font-size: 0.875rem;
+    font-weight: 400;
+    background-color: transparent;
+    color: var(--pb-text-color-light);
+    cursor: pointer;
+    border-radius: 8px;
+    border: 1px solid var(--pb-border-color);
+    transition: background-color 0.2s ease-in-out;
+    svg {
+      width: 12px;
+      height: 12px;
+      fill: var(--pb-text-color-light);
+      margin-left: 4px;
+    }
+  }
+
+  .previewbox-read-more:hover {
+    background-color: var(--pb-background-color-hover);
+  }
+`;
 
   // src/article.ts
   var PreviewBoxArticleElement = class extends LinkPreviewDataDirective {
     constructor() {
       super(...arguments);
-      this.isImgError = false;
-      this.isFaviconError = false;
+      this.readMoreBtnText = "Read more";
     }
     render() {
       return ke`
@@ -1489,13 +1593,26 @@
           class="previewbox-link"
           data-testid="${TEST_IDS.ANCHOR_ELEMENT}"
         >
+          <div class="previewbox-thumbnail" part="thumbnail">
+            <previewbox-image
+              .isLoading=${this._isLoading}
+              .imageUrl=${this.linkData?.imageUrl}
+              .imageAlt=${this.linkData?.imageAlt}
+            ></previewbox-image>
+          </div>
           <div class="previewbox-content">
             <div class="previewbox-title" data-testid="${TEST_IDS.TITLE}">
               ${this._isLoading ? ke`<previewbox-skeleton-shape
-                    width="200px"
-                    height="20px"
-                    data-testid="${TEST_IDS.TITLE_SKELETON}"
-                  />` : this.linkData.title}
+                      width="100%"
+                      height="20px"
+                      data-testid="${TEST_IDS.TITLE_SKELETON}"
+                    ></previewbox-skeleton-shape>
+                    <previewbox-skeleton-shape
+                      width="90%"
+                      height="20px"
+                      style="margin-top: 4px;"
+                      data-testid="${TEST_IDS.TITLE_SKELETON}"
+                    />` : this.linkData.title}
             </div>
             <div
               class="previewbox-description"
@@ -1513,61 +1630,48 @@
                     ></previewbox-skeleton-shape>
                   ` : this.linkData.description}
             </div>
-            <div class="previewbox-metadata">
-              ${this._isLoading ? ke`
-                    <div class="previewbox-metadata-skeleton">
-                      <previewbox-skeleton-shape
-                        width="14px"
-                        data-testid="${TEST_IDS.FAVICON_SKELETON}"
-                        height="14px"
-                        class="rounded"
-                      ></previewbox-skeleton-shape>
-                      <previewbox-skeleton-shape
-                        width="60px"
-                        height="14px"
-                      ></previewbox-skeleton-shape>
-                      <previewbox-skeleton-shape
-                        width="4px"
-                        height="4px"
-                        class="rounded"
-                      ></previewbox-skeleton-shape>
-                      <previewbox-skeleton-shape
-                        width="44px"
-                        height="14px"
-                      ></previewbox-skeleton-shape>
-                    </div>
-                  ` : ke`
-                    <previewbox-favicon
-                      .faviconUrl=${this.linkData.favicon}
-                    ></previewbox-favicon>
-                    <span data-testid="${TEST_IDS.ORIGIN}"
-                      >${this.linkData.origin}</span
-                    >${this.linkData.author ? ke`<span data-testid="${TEST_IDS.AUTHOR}"
-                          >${this.linkData.author}</span
-                        >` : ""}
-                  `}
+
+            <div class="previewbox-read-more-container">
+              ${typeof this.hideReadMoreBtn === "undefined" ? ke`
+                    <button
+                      class="previewbox-read-more"
+                      data-testid="${TEST_IDS.READ_MORE_BUTTON}"
+                      title=${this.readMoreBtnText}
+                    >
+                      ${this.readMoreBtnText}
+                      <svg
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 14 10"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M1 5h12m0 0L9 1m4 4L9 9"
+                        ></path>
+                      </svg>
+                    </button>
+                  ` : ke``}
             </div>
           </div>
-          <div class="previewbox-thumbnail">
-            <previewbox-image
-              .isLoading=${this._isLoading}
-              .imageUrl=${this.linkData?.imageUrl}
-              .imageAlt=${this.linkData?.imageAlt}
-            ></previewbox-image>
-          </div>
         </a>
-        ${typeof this.hidePoweredBy !== "undefined" ? "" : ke`<powered-by-previewbox></powered-by-previewbox>`}
+        ${typeof this.hidePoweredBy !== "undefined" ? "" : ke`<powered-by-previewbox
+              data-testid="${TEST_IDS.POWERED_BY}"
+            ></powered-by-previewbox>`}
       </article>
     `;
     }
   };
-  PreviewBoxArticleElement.styles = styles;
+  PreviewBoxArticleElement.styles = styles7;
   __decorateClass([
-    r4()
-  ], PreviewBoxArticleElement.prototype, "isImgError", 2);
+    n4()
+  ], PreviewBoxArticleElement.prototype, "hideReadMoreBtn", 2);
   __decorateClass([
-    r4()
-  ], PreviewBoxArticleElement.prototype, "isFaviconError", 2);
+    n4()
+  ], PreviewBoxArticleElement.prototype, "readMoreBtnText", 2);
   PreviewBoxArticleElement = __decorateClass([
     t2("previewbox-article")
   ], PreviewBoxArticleElement);

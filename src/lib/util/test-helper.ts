@@ -13,6 +13,8 @@ export const TEST_IDS = {
   TITLE: 'TITLE',
   TITLE_SKELETON: 'TITLE_SKELETON',
   DESCRIPTION: 'DESCRIPTION',
+  READ_MORE_BUTTON: 'READ_MORE_BUTTON',
+  POWERED_BY: 'POWERED_BY',
 };
 
 export function byTestId(testId: string) {

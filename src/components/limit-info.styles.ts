@@ -12,6 +12,7 @@ export const styles = css`
     align-items: center;
     justify-content: center;
     z-index: 2;
+    text-align: center;
   }
 
   .limit-info-container {

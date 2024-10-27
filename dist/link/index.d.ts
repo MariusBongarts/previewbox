@@ -10,9 +10,6 @@ declare module "shared.styles" {
 declare module "article.styles" {
     export const styles: import("lit").CSSResult;
 }
-declare module "link.styles" {
-    export const styles: import("lit").CSSResult;
-}
 declare module "lib/domain/models/link-preview-data" {
     export interface LinkPreviewData {
         title: string | null;
@@ -161,6 +158,8 @@ declare module "lib/util/test-helper" {
         TITLE: string;
         TITLE_SKELETON: string;
         DESCRIPTION: string;
+        READ_MORE_BUTTON: string;
+        POWERED_BY: string;
     };
     export function byTestId(testId: string): string;
 }
@@ -273,11 +272,20 @@ declare module "article" {
      *
      * @csspart link - The a-element that contains the link
      * @csspart container - The container element that contains the anchor element
+     * @csspart thumbnail - The thumbnail element that contains the image
      */
     export class PreviewBoxArticleElement extends LinkPreviewDataDirective {
         static styles: import("lit").CSSResult;
-        isImgError: boolean;
-        isFaviconError: boolean;
+        /**
+         * If attribute is present, the read more button will not be shown.
+         */
+        hideReadMoreBtn: string | undefined;
+        /**
+         * The text for the read more button.
+         *
+         * Default: 'Read more'
+         */
+        readMoreBtnText: string;
         render(): import("lit-html").TemplateResult<1>;
     }
     global {
@@ -285,6 +293,9 @@ declare module "article" {
             'previewbox-article': PreviewBoxArticleElement;
         }
     }
+}
+declare module "link.styles" {
+    export const styles: import("lit").CSSResult;
 }
 declare module "link" {
     import { LinkPreviewDataDirective } from "directives/link-preview-data-directive";
@@ -301,8 +312,6 @@ declare module "link" {
      */
     export class PreviewBoxLinkElement extends LinkPreviewDataDirective {
         static styles: import("lit").CSSResult;
-        isImgError: boolean;
-        isFaviconError: boolean;
         render(): import("lit-html").TemplateResult<1>;
     }
     global {
@@ -344,6 +353,9 @@ declare module "test/test-utils" {
     export const wait: (ms: number) => Promise<unknown>;
     export const extractFaviconElement: (el: Element) => import("components/favicon").PreviewBoxFaviconElement | null | undefined;
     export const extractImageElement: (el: Element) => import("components/image").PreviewBoxImageElement | null | undefined;
+}
+declare module "test/article_test" {
+    import "article";
 }
 declare module "test/link_test" {
     import "link";

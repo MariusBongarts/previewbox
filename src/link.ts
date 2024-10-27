@@ -1,5 +1,5 @@
 import {html} from 'lit';
-import {customElement, state} from 'lit/decorators.js';
+import {customElement} from 'lit/decorators.js';
 import {styles} from './link.styles';
 import {LinkPreviewDataDirective} from './directives/link-preview-data-directive';
 import {TEST_IDS} from './lib/util/test-helper';
@@ -8,7 +8,7 @@ import './components/limit-info';
 import './components/powered-by-previewbox';
 import './components/favicon';
 import './components/image';
-import { ApiError } from './lib/services/api-fetcher';
+import {ApiError} from './lib/services/api-fetcher';
 
 /**
  * Previewbox Link | <previewbox-link>
@@ -19,12 +19,6 @@ import { ApiError } from './lib/services/api-fetcher';
 @customElement('previewbox-link')
 export class PreviewBoxLinkElement extends LinkPreviewDataDirective {
   static override styles = styles;
-
-  @state()
-  isImgError = false;
-
-  @state()
-  isFaviconError = false;
 
   override render() {
     return html`
@@ -117,7 +111,9 @@ export class PreviewBoxLinkElement extends LinkPreviewDataDirective {
         </a>
         ${typeof this.hidePoweredBy !== 'undefined'
           ? ''
-          : html`<powered-by-previewbox></powered-by-previewbox>`}
+          : html`<powered-by-previewbox
+              data-testid="${TEST_IDS.POWERED_BY}"
+            ></powered-by-previewbox>`}
       </figure>
     `;
   }

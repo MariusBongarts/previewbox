@@ -67,7 +67,7 @@ export const styles = css`
     opacity: 0.7;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    color: var(--pb-metadata-color);
+    color: var(--pb-text-color-light);
   }
 
   .previewbox-metadata {
@@ -79,7 +79,7 @@ export const styles = css`
     font-size: 0.75rem;
     font-weight: 500;
     white-space: nowrap;
-    color: var(--pb-metadata-color);
+    color: var(--pb-text-color-light);
     .previewbox-metadata-skeleton {
       display: flex;
       column-gap: 4px;
