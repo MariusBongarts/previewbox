@@ -42,6 +42,16 @@
      </tr>
      
        <tr>
+         <td>hideReadMoreBtn</td><td>If attribute is present, the read more button will not be shown.</td><td>string | undefined</td><td></td>
+       </tr>
+     
+       <tr>
+         <td>readMoreBtnText</td><td>The text for the read more button.
+
+Default: 'Read more'</td><td>string</td><td>'Read more'</td>
+       </tr>
+     
+       <tr>
          <td>url</td><td>
 If the href is not provided, the url will be used to fetch the link preview data.</td><td>string | null</td><td>null</td>
        </tr>
@@ -118,11 +128,13 @@ Reads the open graph data from the provided URL.</td><td>string</td><td>''</td>
      </tr>
      
        <tr>
-         <td>isImgError</td><td></td><td></td><td>boolean</td><td>false</td>
+         <td>hideReadMoreBtn</td><td>hideReadMoreBtn</td><td>If attribute is present, the read more button will not be shown.</td><td>string | undefined</td><td></td>
        </tr>
      
        <tr>
-         <td>isFaviconError</td><td></td><td></td><td>boolean</td><td>false</td>
+         <td>readMoreBtnText</td><td>readMoreBtnText</td><td>The text for the read more button.
+
+Default: 'Read more'</td><td>string</td><td>'Read more'</td>
        </tr>
      
        <tr>
@@ -232,6 +244,10 @@ Reads the open graph data from the provided URL.</td><td>string</td><td>''</td>
          <td>container</td><td>The container element that contains the anchor element</td>
        </tr>
      
+       <tr>
+         <td>thumbnail</td><td>The thumbnail element that contains the image</td>
+       </tr>
+     
    </table>
  
        
@@ -322,14 +338,6 @@ Reads the open graph data from the provided URL.</td><td>string</td><td>''</td>
      <tr>
        <th>Name</th><th>Attribute</th><th>Description</th><th>Type</th><th>Default</th>
      </tr>
-     
-       <tr>
-         <td>isImgError</td><td></td><td></td><td>boolean</td><td>false</td>
-       </tr>
-     
-       <tr>
-         <td>isFaviconError</td><td></td><td></td><td>boolean</td><td>false</td>
-       </tr>
      
        <tr>
          <td>url</td><td>url</td><td>
